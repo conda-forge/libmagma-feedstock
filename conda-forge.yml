@@ -5,8 +5,8 @@ conda_build:
   error_overlinking: true
 conda_forge_output_validation: true
 provider:
-  linux_ppc64le: azure
-  linux_aarch64: azure
+  linux_ppc64le: default
+  linux_aarch64: default
 azure:
   # Enable artifact storage to test with GPUs locally
   store_build_artifacts: true
