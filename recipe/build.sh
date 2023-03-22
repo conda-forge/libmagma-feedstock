@@ -4,8 +4,8 @@ set -exv
 make generate --jobs ${CPU_COUNT}
 
 # Duplicate lists because of https://bitbucket.org/icl/magma/pull-requests/32
-export CUDA_ARCH_LIST="sm_35,sm_50,sm_60,sm_70,sm_80"
-export CUDAARCHS="35-virtual;50-virtual;60-virtual;70-virtual;80-virtual"
+export CUDA_ARCH_LIST="sm_60"
+export CUDAARCHS="60-virtual"
 
 # Remove CXX standard flags added by conda-forge. std=c++11 is required to
 # compile some .cu files
