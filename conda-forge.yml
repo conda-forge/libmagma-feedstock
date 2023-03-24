@@ -7,3 +7,6 @@ github:
 provider:
   linux_aarch64: default
   linux_ppc64le: default
+azure:
+  # Enable artifact storage to test with GPUs locally
+  store_build_artifacts: true
