@@ -1,9 +1,5 @@
 c_compiler:
-- gcc
-c_compiler_version:
-- '10'
-cdt_name:
-- cos7
+- vs2019
 channel_sources:
 - conda-forge
 channel_targets:
@@ -13,20 +9,13 @@ cuda_compiler:
 cuda_compiler_version:
 - '11.2'
 cxx_compiler:
-- gxx
-cxx_compiler_version:
-- '10'
-docker_image:
-- quay.io/condaforge/linux-anvil-cuda:11.2
+- vs2019
 libblas:
 - 3.9 *netlib
 liblapack:
 - 3.9 *netlib
 target_platform:
-- linux-64
+- win-64
 zip_keys:
-- - c_compiler_version
-  - cxx_compiler_version
+- - cuda_compiler
   - cuda_compiler_version
-  - cdt_name
-  - docker_image
