@@ -1,5 +1,8 @@
 set -exv
 
+# Get an updated config.sub and config.guess
+cp $BUILD_PREFIX/share/gnuconfig/config.* .
+
 # This step is required when building from raw source archive
 make generate --jobs ${CPU_COUNT}
 
