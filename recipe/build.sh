@@ -21,11 +21,11 @@ fi
 
 # Remove CXX standard flags added by conda-forge. std=c++11 is required to
 # compile some .cu files
-CXXFLAGS="${CXXFLAGS//-std=c++17/-std=c++11}"
+export CXXFLAGS="${CXXFLAGS//-std=c++17/-std=c++11}"
 
 # Conda-forge nvcc compiler flags environment variable doesn't match CMake environment variable
 # Redirect it so that the flags are added to nvcc calls
-CUDAFLAGS="${CUDAFLAGS} ${CUDA_CFLAGS}"
+export CUDAFLAGS="${CUDAFLAGS} ${CUDA_CFLAGS}"
 
 mkdir build
 cd build
