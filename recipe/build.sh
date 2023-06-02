@@ -7,22 +7,22 @@ make generate --jobs ${CPU_COUNT}
 
 # Duplicate lists because of https://bitbucket.org/icl/magma/pull-requests/32
 export CUDA_ARCH_LIST="sm_35,sm_50,sm_60,sm_61,sm_70,sm_75,sm_80"
-export CUDAARCHS="35-virtual;50-virtual;60-virtual;61-virtual;70-virtual;75-virtual;80-virtual"
+export CUDAARCHS="35-real;50-real;60-real;61-real;70-real;75-real;80-real;80-virtual"
 
 if [[ "$cuda_compiler_version" == "12.0" ]]; then
   export CUDA_ARCH_LIST="sm_50,sm_60,sm_61,sm_70,sm_75,sm_80,sm_86,sm_89,sm_90"
-  export CUDAARCHS="50-virtual;60-virtual;61-virtual;70-virtual;75-virtual;80-virtual;86-virtual;89-virtual;90-virtual"
+  export CUDAARCHS="50-real;60-real;61-real;70-real;75-real;80-real;86-real;89-real;90-real;90-virtual"
 fi
 
 if [[ "$target_platform" == "linux-ppc64le" ]]; then
   export CUDA_ARCH_LIST="sm_50,sm_60,sm_61,sm_70,sm_75,sm_80,sm_86"
-  export CUDAARCHS="50-virtual;60-virtual;61-virtual;70-virtual;75-virtual;80-virtual;86-virtual"
+  export CUDAARCHS="50-real;60-real;61-real;70-real;75-real;80-real;86-real;86-virtual"
 fi
 
 # Jetsons are more common for ARM devices, so target those minor versions
 if [[ "$target_platform" == "linux-aarch64" ]]; then
   export CUDA_ARCH_LIST="sm_50,sm_53,sm_60,sm_62,sm_70,sm_72,sm_80,"
-  export CUDAARCHS="50-virtual;53-virtual;60-virtual;62-virtual;70-virtual;72-virtual;80-virtual"
+  export CUDAARCHS="50-real;53-real;60-real;62-real;70-real;72-real;80-real;80-virtual"
 fi
 
 # Remove CXX standard flags added by conda-forge. std=c++11 is required to
