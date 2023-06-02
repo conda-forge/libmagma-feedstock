@@ -1,8 +1,5 @@
 set -exv
 
-# Get an updated config.sub and config.guess
-cp $BUILD_PREFIX/share/gnuconfig/config.* .
-
 # This step is required when building from raw source archive
 make generate --jobs ${CPU_COUNT}
 
@@ -10,16 +7,20 @@ make generate --jobs ${CPU_COUNT}
 export CUDA_ARCH_LIST="sm_35,sm_50,sm_60,sm_61,sm_70,sm_75,sm_80,sm_86"
 export CUDAARCHS="35-virtual;50-virtual;60-virtual;61-virtual;70-virtual;75-virtual;80-virtual;86-virtual"
 
-# Only build the lowest non-deprecated arch to minimize build time
-if [[ "$target_platform" == "linux-ppc64le" || "$target_platform" == "linux-aarch64" ]]; then
-  export CUDA_ARCH_LIST="sm_60;sm_80"
-  export CUDAARCHS="60-virtual;80-virtual"
-fi
-
-# Only build the lowest non-deprecated arch to minimize build time
 if [[ "$cuda_compiler_version" == "12.0" ]]; then
   export CUDA_ARCH_LIST="sm_50,sm_60,sm_61,sm_70,sm_75,sm_80,sm_86,sm_89,sm_90"
   export CUDAARCHS="50-virtual;60-virtual;61-virtual;70-virtual;75-virtual;80-virtual;86-virtual;89-virtual;90-virtual"
+fi
+
+if [[ "$target_platform" == "linux-ppc64le" ]]; then
+  export CUDA_ARCH_LIST="sm_50,sm_60,sm_61,sm_70,sm_75,sm_80,sm_86"
+  export CUDAARCHS="50-virtual;60-virtual;61-virtual;70-virtual;75-virtual;80-virtual;86-virtual"
+fi
+
+# Jetsons are more common for ARM devices, so target those minor versions
+if [[ "$target_platform" == "linux-aarch64" ]]; then
+  export CUDA_ARCH_LIST="sm_50,sm_53,sm_60,sm_62,sm_70,sm_72,sm_80,"
+  export CUDAARCHS="50-virtual;53-virtual;60-virtual;62-virtual;70-virtual;72-virtual;80-virtual"
 fi
 
 # Remove CXX standard flags added by conda-forge. std=c++11 is required to
