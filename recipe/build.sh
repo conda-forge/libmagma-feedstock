@@ -3,9 +3,11 @@ set -exv
 # This step is required when building from raw source archive
 make generate --jobs ${CPU_COUNT}
 
+# Only about 7 virtual archs can be built 6 hours for CUDA 11
+
 # Duplicate lists because of https://bitbucket.org/icl/magma/pull-requests/32
-export CUDA_ARCH_LIST="sm_35,sm_50,sm_60,sm_61,sm_70,sm_75,sm_80,sm_86"
-export CUDAARCHS="35-virtual;50-virtual;60-virtual;61-virtual;70-virtual;75-virtual;80-virtual;86-virtual"
+export CUDA_ARCH_LIST="sm_35,sm_50,sm_60,sm_61,sm_70,sm_75,sm_80"
+export CUDAARCHS="35-virtual;50-virtual;60-virtual;61-virtual;70-virtual;75-virtual;80-virtual"
 
 if [[ "$cuda_compiler_version" == "12.0" ]]; then
   export CUDA_ARCH_LIST="sm_50,sm_60,sm_61,sm_70,sm_75,sm_80,sm_86,sm_89,sm_90"
