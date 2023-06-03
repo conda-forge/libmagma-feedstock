@@ -3,19 +3,35 @@ set -exv
 # This step is required when building from raw source archive
 make generate --jobs ${CPU_COUNT}
 
-# Duplicate lists because of https://bitbucket.org/icl/magma/pull-requests/32
-export CUDA_ARCH_LIST="sm_35,sm_50,sm_60,sm_70,sm_80"
-export CUDAARCHS="35-virtual;50-virtual;60-virtual;70-virtual;80-virtual"
+# Only about 7 virtual archs can be built 6 hours for CUDA 11
 
-# Only build the lowest non-deprecated arch to minimize build time
-if [[ "$target_platform" == "linux-ppc64le" || "$target_platform" == "linux-aarch64" ]]; then
-  export CUDA_ARCH_LIST="sm_60"
-  export CUDAARCHS="60-virtual"
+# Duplicate lists because of https://bitbucket.org/icl/magma/pull-requests/32
+export CUDA_ARCH_LIST="sm_35,sm_50,sm_60,sm_61,sm_70,sm_75,sm_80"
+export CUDAARCHS="35-virtual;50-virtual;60-virtual;61-virtual;70-virtual;75-virtual;80-virtual"
+
+if [[ "$cuda_compiler_version" == "12.0" ]]; then
+  export CUDA_ARCH_LIST="sm_50,sm_60,sm_61,sm_70,sm_75,sm_80,sm_86,sm_89,sm_90"
+  export CUDAARCHS="50-virtual;60-virtual;61-virtual;70-virtual;75-virtual;80-virtual;86-virtual;89-virtual;90-virtual"
+fi
+
+if [[ "$target_platform" == "linux-ppc64le" ]]; then
+  export CUDA_ARCH_LIST="sm_50,sm_60,sm_61,sm_70,sm_75,sm_80,sm_86"
+  export CUDAARCHS="50-virtual;60-virtual;61-virtual;70-virtual;75-virtual;80-virtual;86-virtual"
+fi
+
+# Jetsons are more common for ARM devices, so target those minor versions
+if [[ "$target_platform" == "linux-aarch64" ]]; then
+  export CUDA_ARCH_LIST="sm_50,sm_53,sm_60,sm_62,sm_70,sm_72,sm_80,"
+  export CUDAARCHS="50-virtual;53-virtual;60-virtual;62-virtual;70-virtual;72-virtual;80-virtual"
 fi
 
 # Remove CXX standard flags added by conda-forge. std=c++11 is required to
 # compile some .cu files
-CXXFLAGS="${CXXFLAGS//-std=c++17/-std=c++11}"
+export CXXFLAGS="${CXXFLAGS//-std=c++17/-std=c++11}"
+
+# Conda-forge nvcc compiler flags environment variable doesn't match CMake environment variable
+# Redirect it so that the flags are added to nvcc calls
+export CUDAFLAGS="${CUDAFLAGS} ${CUDA_CFLAGS}"
 
 mkdir build
 cd build
