@@ -21,8 +21,8 @@ fi
 
 # Jetsons are more common for ARM devices, so target those minor versions
 if [[ "$target_platform" == "linux-aarch64" ]]; then
-  export CUDA_ARCH_LIST="sm_50,sm_53,sm_60,sm_62,sm_70,sm_72,sm_80,"
-  export CUDAARCHS="50-real;53-real;60-real;62-real;70-real;72-real;80"
+  export CUDA_ARCH_LIST="sm_50,sm_53,sm_60,sm_62,sm_70,sm_72,sm_80"
+  export CUDAARCHS="50-real;60-real;62-real;70-real;72-real;80"
 fi
 
 # Remove CXX standard flags added by conda-forge. std=c++11 is required to
