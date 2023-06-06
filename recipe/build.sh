@@ -11,7 +11,7 @@ export CUDAARCHS="35-real;50-real;60-real;61-real;70-real;75-real;80"
 
 if [[ "$cuda_compiler_version" == "12.0" ]]; then
   export CUDA_ARCH_LIST="sm_50,sm_60,sm_61,sm_70,sm_75,sm_80,sm_86,sm_89,sm_90"
-  export CUDAARCHS="50-real;60-real;61-real;70-real;75-real;80-real;86-real;89-real;90"
+  export CUDAARCHS="50-real;60-real;70-real;75-real;80-real;89-real;90"
 fi
 
 if [[ "$target_platform" == "linux-ppc64le" ]]; then
