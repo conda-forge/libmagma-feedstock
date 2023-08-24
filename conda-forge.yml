@@ -1,4 +1,5 @@
 azure:
+  # Enable artifact storage to test with GPUs locally
   store_build_artifacts: true
 build_platform:
   linux_aarch64: linux_64
