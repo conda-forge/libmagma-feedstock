@@ -50,7 +50,6 @@ jobs:
                                   microsoft-edge-stable
          sudo apt-get autoremove -y >& /dev/null
          sudo apt-get autoclean -y >& /dev/null
-         sudo docker image prune --all --force
          df -h
     displayName: Manage disk space
   # configure qemu binfmt-misc running.  This allows us to run docker containers
