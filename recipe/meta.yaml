@@ -91,8 +91,8 @@ package:
   version: {{ version }}
 
 source:
-  - url: https://bitbucket.org/icl/magma/get/v{{ version }}.tar.bz2
-    sha256: f9cd24024e3e14faf4d38cbd8aef56a62119baa514fd383447c3b64f415bfc92
+  - url: https://icl.utk.edu/projectsfiles/magma/downloads/magma-{{ version }}.tar.gz
+    sha256: d9c8711c047a38cae16efde74bee2eb3333217fd2711e1e9b8606cbbb4ae1a50
   - path: make.inc
   - patches:
       - optional-install.patch
@@ -157,6 +157,7 @@ test:
 
 about:
   home: http://icl.cs.utk.edu/magma/software/index.html
+  dev_url: https://bitbucket.org/icl/magma
   summary: Matrix Algebra on GPU and Multicore Architectures
   license: BSD-3-Clause
   license_file: COPYRIGHT
