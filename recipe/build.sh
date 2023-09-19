@@ -1,7 +1,7 @@
 set -exv
 
 # This step is required when building from raw source archive
-make generate --jobs ${CPU_COUNT}
+# make generate --jobs ${CPU_COUNT}
 
 # Only about 7 virtual archs can be built 6 hours for CUDA 11
 
