@@ -3,11 +3,16 @@ set -exv
 # This step is required when building from raw source archive
 # make generate --jobs ${CPU_COUNT}
 
+if [[ "$cuda_compiler_version" == "11.2" ]]; then
+  echo "This script no longer supports CUDA < 11.8 because of newer CUDA archs."
+  exit 1;
+fi
+
 # Only about 7 virtual archs can be built 6 hours for CUDA 11
 
 # Duplicate lists because of https://bitbucket.org/icl/magma/pull-requests/32
 export CUDA_ARCH_LIST="sm_35,sm_50,sm_60,sm_61,sm_70,sm_75,sm_80"
-export CUDAARCHS="35-real;50-real;60-real;61-real;70-real;75-real;80"
+export CUDAARCHS="35-real;50-real;60-real;61-real;70-real;75-real;80-real;90"
 
 if [[ "$cuda_compiler_version" == "12.0" ]]; then
   export CUDA_ARCH_LIST="sm_50,sm_60,sm_61,sm_70,sm_75,sm_80,sm_86,sm_89,sm_90"
@@ -15,14 +20,14 @@ if [[ "$cuda_compiler_version" == "12.0" ]]; then
 fi
 
 if [[ "$target_platform" == "linux-ppc64le" ]]; then
-  export CUDA_ARCH_LIST="sm_50,sm_60,sm_61,sm_70,sm_75,sm_80,sm_86"
-  export CUDAARCHS="50-real;60-real;70-real;80"
+  export CUDA_ARCH_LIST="sm_50,sm_60,sm_61,sm_70,sm_75,sm_80,sm_86,sm_90"
+  export CUDAARCHS="50-real;60-real;61-real;70-real;80-real;86-real;90"
 fi
 
 # Jetsons are more common for ARM devices, so target those minor versions
 if [[ "$target_platform" == "linux-aarch64" ]]; then
-  export CUDA_ARCH_LIST="sm_50,sm_53,sm_60,sm_62,sm_70,sm_72,sm_80"
-  export CUDAARCHS="50-real;60-real;70-real;80"
+  export CUDA_ARCH_LIST="sm_50,sm_53,sm_60,sm_62,sm_70,sm_72,sm_80,sm_87,sm_90"
+  export CUDAARCHS="50-real;60-real;62-real;70-real;80-real;87-real;90"
 fi
 
 # Remove CXX standard flags added by conda-forge. std=c++11 is required to

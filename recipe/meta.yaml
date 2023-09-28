@@ -103,7 +103,7 @@ build:
   skip: true  # [cuda_compiler_version == "10.2"]
   skip: true  # [cuda_compiler_version == "11.0"]
   skip: true  # [cuda_compiler_version == "11.1"]
-  skip: true  # [ppc64le]
+  skip: true  # [cuda_compiler_version == "11.2"]
   run_exports:
     - {{ pin_subpackage('libmagma', max_pin='x.x.x') }}
 
