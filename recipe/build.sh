@@ -14,8 +14,8 @@ export CUDA_ARCH_LIST="sm_50,sm_60,sm_70,sm_75,sm_80"
 export CUDAARCHS="50-real;60-real;70-real;75-real;80-real"
 
 if [[ "$cuda_compiler_version" == "11.2" ]]; then
-  export CUDA_ARCH_LIST="${CUDA_ARCH_LIST},sm_35,sm_86"
-  export CUDAARCHS="${CUDAARCHS};35-real;86"
+  export CUDA_ARCH_LIST="${CUDA_ARCH_LIST},sm_35,sm_80"
+  export CUDAARCHS="${CUDAARCHS};35-real;80"
 fi
 
 if [[ "$cuda_compiler_version" == "11.8" ]]; then
