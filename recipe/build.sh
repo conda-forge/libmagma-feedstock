@@ -29,12 +29,16 @@ if [[ "$cuda_compiler_version" == "12.0" ]]; then
 fi
 
 if [[ "$target_platform" == "linux-ppc64le" ]]; then
+  export CUDA_ARCH_LIST=${CUDA_ARCH_LIST//,sm_89/}
+  export CUDAARCHS=${CUDAARCHS//;89-real/}
   if [[ "$cuda_compiler_version" == "11"* ]]; then
     export CMAKE_ARGS="${CMAKE_ARGS} -DCUDAToolkit_ROOT=/usr/local/cuda/targets/ppc64le-linux"
   fi
 fi
 
 if [[ "$target_platform" == "linux-aarch64" ]]; then
+  export CUDA_ARCH_LIST=${CUDA_ARCH_LIST//,sm_89/}
+  export CUDAARCHS=${CUDAARCHS//;89-real/}
   if [[ "$cuda_compiler_version" == "11"* ]]; then
     export CMAKE_ARGS="${CMAKE_ARGS} -DCUDAToolkit_ROOT=/usr/local/cuda/targets/sbsa-linux"
   fi
