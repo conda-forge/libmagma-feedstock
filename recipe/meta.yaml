@@ -98,12 +98,11 @@ source:
       - optional-install.patch
 
 build:
-  number: 5
+  number: 6
   skip: true  # [cuda_compiler_version == "None"]
   skip: true  # [cuda_compiler_version == "10.2"]
   skip: true  # [cuda_compiler_version == "11.0"]
   skip: true  # [cuda_compiler_version == "11.1"]
-  skip: true  # [ppc64le]
   run_exports:
     - {{ pin_subpackage('libmagma', max_pin='x.x.x') }}
 

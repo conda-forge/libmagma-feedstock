@@ -5,24 +5,43 @@ set -exv
 
 # Only about 7 virtual archs can be built 6 hours for CUDA 11
 
+# 11.2 supports archs 3.5 - 8.6
+# 11.8 supports archs 3.5 - 9.0
+# 12.x supports archs 5.0 - 9.0
+
 # Duplicate lists because of https://bitbucket.org/icl/magma/pull-requests/32
-export CUDA_ARCH_LIST="sm_35,sm_50,sm_60,sm_61,sm_70,sm_75,sm_80"
-export CUDAARCHS="35-real;50-real;60-real;61-real;70-real;75-real;80"
+export CUDA_ARCH_LIST="sm_50,sm_60,sm_70,sm_75,sm_80"
+export CUDAARCHS="50-real;60-real;70-real;75-real;80-real"
+
+if [[ "$cuda_compiler_version" == "11.2" ]]; then
+  export CUDA_ARCH_LIST="${CUDA_ARCH_LIST},sm_35"
+  export CUDAARCHS="${CUDAARCHS};35-virtual;80-virtual"
+fi
+
+if [[ "$cuda_compiler_version" == "11.8" ]]; then
+  export CUDA_ARCH_LIST="${CUDA_ARCH_LIST},sm_35,sm_89,sm_90"
+  export CUDAARCHS="${CUDAARCHS};35-virtual;89-real;90"
+fi
 
 if [[ "$cuda_compiler_version" == "12.0" ]]; then
-  export CUDA_ARCH_LIST="sm_50,sm_60,sm_61,sm_70,sm_75,sm_80,sm_86,sm_89,sm_90"
-  export CUDAARCHS="50-real;60-real;70-real;75-real;80-real;89-real;90"
+  export CUDA_ARCH_LIST="${CUDA_ARCH_LIST},sm_89,sm_90"
+  export CUDAARCHS="${CUDAARCHS};89-real;90"
 fi
 
 if [[ "$target_platform" == "linux-ppc64le" ]]; then
-  export CUDA_ARCH_LIST="sm_50,sm_60,sm_61,sm_70,sm_75,sm_80,sm_86"
-  export CUDAARCHS="50-real;60-real;70-real;80"
+  export CUDA_ARCH_LIST=${CUDA_ARCH_LIST//,sm_89/}
+  export CUDAARCHS=${CUDAARCHS//;89-real/}
+  if [[ "$cuda_compiler_version" == "11"* ]]; then
+    export CMAKE_ARGS="${CMAKE_ARGS} -DCUDAToolkit_ROOT=/usr/local/cuda/targets/ppc64le-linux"
+  fi
 fi
 
-# Jetsons are more common for ARM devices, so target those minor versions
 if [[ "$target_platform" == "linux-aarch64" ]]; then
-  export CUDA_ARCH_LIST="sm_50,sm_53,sm_60,sm_62,sm_70,sm_72,sm_80"
-  export CUDAARCHS="50-real;60-real;70-real;80"
+  export CUDA_ARCH_LIST=${CUDA_ARCH_LIST//,sm_89/}
+  export CUDAARCHS=${CUDAARCHS//;89-real/}
+  if [[ "$cuda_compiler_version" == "11"* ]]; then
+    export CMAKE_ARGS="${CMAKE_ARGS} -DCUDAToolkit_ROOT=/usr/local/cuda/targets/sbsa-linux"
+  fi
 fi
 
 # Remove CXX standard flags added by conda-forge. std=c++11 is required to
