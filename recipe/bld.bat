@@ -8,17 +8,17 @@
 set "CUDA_ARCH_LIST=sm_50,sm_60,sm_70,sm_80"
 set "CUDAARCHS=50-virtual;60-virtual;70-virtual;80-virtual"
 
-if %cuda_compiler_version%=="11.2" (
+if "%cuda_compiler_version%"=="11.2" (
   set "CUDA_ARCH_LIST=sm_35,%CUDA_ARCH_LIST%"
   set "CUDAARCHS=35-virtual;%CUDAARCHS%"
 )
 
-if %cuda_compiler_version%=="11.8" (
+if "%cuda_compiler_version%"=="11.8" (
   set "CUDA_ARCH_LIST=sm_35,%CUDA_ARCH_LIST%,sm_90"
   set "CUDAARCHS=35-virtual;%CUDAARCHS%;90-virtual"
 )
 
-if %cuda_compiler_version%=="12.0" (
+if "%cuda_compiler_version%"=="12.0" (
   set "CUDA_ARCH_LIST=%CUDA_ARCH_LIST%,sm_90"
   set "CUDAARCHS=%CUDAARCHS%;90-virtual"
 )
