@@ -11,31 +11,21 @@ set -exv
 
 # Duplicate lists because of https://bitbucket.org/icl/magma/pull-requests/32
 export CUDA_ARCH_LIST="sm_50,sm_60,sm_70,sm_75,sm_80"
-export CUDAARCHS="50-real;60-real;70-real;75-real;80-real"
+export CUDAARCHS="50-real;52-real;60-real;61-real;70-real;75-real;80-real;86-real"
 
 if [[ "$cuda_compiler_version" == "11.2" ]]; then
   export CUDA_ARCH_LIST="${CUDA_ARCH_LIST},sm_35"
-  export CUDAARCHS="${CUDAARCHS};35-virtual;80-virtual"
+  export CUDAARCHS="${CUDAARCHS};35-real;86-virtual"
 fi
 
 if [[ "$cuda_compiler_version" == "11.8" ]]; then
   export CUDA_ARCH_LIST="${CUDA_ARCH_LIST},sm_35,sm_89,sm_90"
-  export CUDAARCHS="${CUDAARCHS};35-virtual;89-real;90"
+  export CUDAARCHS="${CUDAARCHS};35-real;89-real;90"
 fi
 
 if [[ "$cuda_compiler_version" == "12.0" ]]; then
   export CUDA_ARCH_LIST="${CUDA_ARCH_LIST},sm_89,sm_90"
   export CUDAARCHS="${CUDAARCHS};89-real;90"
-fi
-
-if [[ "$target_platform" == "linux-ppc64le" ]]; then
-  export CUDA_ARCH_LIST=${CUDA_ARCH_LIST//,sm_89/}
-  export CUDAARCHS=${CUDAARCHS//;89-real/}
-fi
-
-if [[ "$target_platform" == "linux-aarch64" ]]; then
-  export CUDA_ARCH_LIST=${CUDA_ARCH_LIST//,sm_89/}
-  export CUDAARCHS=${CUDAARCHS//;89-real/}
 fi
 
 # Remove CXX standard flags added by conda-forge. std=c++11 is required to

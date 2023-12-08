@@ -6,21 +6,21 @@
 
 :: Duplicate lists because of https://bitbucket.org/icl/magma/pull-requests/32
 set "CUDA_ARCH_LIST=sm_50,sm_60,sm_70,sm_80"
-set "CUDAARCHS=50-virtual;60-virtual;70-virtual;80-virtual"
+set "CUDAARCHS=50-real;52-real;60-real;61-real;70-real;75-real;80-real;86-real"
 
 if "%cuda_compiler_version%"=="11.2" (
   set "CUDA_ARCH_LIST=sm_35,%CUDA_ARCH_LIST%"
-  set "CUDAARCHS=35-virtual;%CUDAARCHS%"
+  set "CUDAARCHS=%CUDAARCHS%;35-real;86-virtual"
 )
 
 if "%cuda_compiler_version%"=="11.8" (
   set "CUDA_ARCH_LIST=sm_35,%CUDA_ARCH_LIST%,sm_90"
-  set "CUDAARCHS=35-virtual;%CUDAARCHS%;90-virtual"
+  set "CUDAARCHS=%CUDAARCHS%;35-real;89-real;90"
 )
 
 if "%cuda_compiler_version%"=="12.0" (
   set "CUDA_ARCH_LIST=%CUDA_ARCH_LIST%,sm_90"
-  set "CUDAARCHS=%CUDAARCHS%;90-virtual"
+  set "CUDAARCHS=%CUDAARCHS%;89-real;90"
 )
 
 md build
