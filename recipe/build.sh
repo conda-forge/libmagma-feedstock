@@ -59,7 +59,7 @@ cmake --build . \
     --target magma \
     --verbose
 
-cmake --install .
+cmake --install .  --strip
 
 rm -rf $PREFIX/include/*
 rm $PREFIX/lib/pkgconfig/magma.pc
