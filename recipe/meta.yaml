@@ -122,6 +122,7 @@ requirements:
     - ninja
     - python
   host:
+    - cuda-version {{ cuda_compiler_version }}
 {% if cuda_major == 12 %}
     - cuda-cudart-dev
     - libcublas-dev
