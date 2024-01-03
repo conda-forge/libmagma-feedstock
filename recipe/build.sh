@@ -12,7 +12,7 @@ set -exv
 # 12.x supports archs 5.0 - 9.0
 
 # Duplicate lists because of https://bitbucket.org/icl/magma/pull-requests/32
-export CUDA_ARCH_LIST="sm_50,sm_60,sm_70,sm_80"
+export CUDA_ARCH_LIST="sm_50,sm_60,sm_70,sm_75,sm_80"
 export CUDAARCHS="50-real;60-real;70-real;75-real;80-real"
 
 if [[ "$cuda_compiler_version" == "11.2" ]]; then
