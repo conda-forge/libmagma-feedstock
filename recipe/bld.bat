@@ -10,12 +10,12 @@ set "CUDAARCHS=50-virtual;60-virtual;70-virtual;80-virtual"
 
 if "%cuda_compiler_version%"=="11.2" (
   set "CUDA_ARCH_LIST=sm_35,%CUDA_ARCH_LIST%"
-  set "CUDAARCHS=35-virtual;%CUDAARCHS%"
+  set "CUDAARCHS=%CUDAARCHS%;35-virtual"
 )
 
 if "%cuda_compiler_version%"=="11.8" (
   set "CUDA_ARCH_LIST=sm_35,%CUDA_ARCH_LIST%,sm_90"
-  set "CUDAARCHS=35-virtual;%CUDAARCHS%;90-virtual"
+  set "CUDAARCHS=%CUDAARCHS%;35-virtual;90-virtual"
 )
 
 if "%cuda_compiler_version%"=="12.0" (
