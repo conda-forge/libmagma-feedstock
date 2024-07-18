@@ -93,9 +93,9 @@ package:
 source:
   - url: https://icl.utk.edu/projectsfiles/magma/downloads/magma-{{ version }}.tar.gz
     sha256: 729bc1a70e518a7422fe7a3a54537a4741035a77be3349f66eac5c362576d560
-  - path: make.inc
-  - patches:
+    patches:
       - optional-install.patch
+  - path: make.inc
 
 build:
   number: 2
