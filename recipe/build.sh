@@ -6,6 +6,12 @@ set -exv
 # Only about 7 virtual archs can be built 6 hours for CUDA 11
 # Only about 8 archs fit into the default 2GB address space; could use
 # -mcmodel=medium to increase address space
+if [[ "$target_platform" == "linux-64"]] || [[ "$target_platform" == "linux-ppc64le"]]; then
+  export CXXFLAGS="${CXXFLAGS} -mcmodel=medium"
+fi
+if [[ "$target_platform" == "linux-aarch64"]]; then
+  export CXXFLAGS="${CXXFLAGS} -mcmodel=small"
+fi
 
 # 11.2 supports archs 3.5 - 8.6
 # 11.8 supports archs 3.5 - 9.0
@@ -23,6 +29,8 @@ fi
 if [[ "$cuda_compiler_version" == "11.8" ]]; then
   export CUDA_ARCH_LIST="${CUDA_ARCH_LIST},sm_35,sm_89,sm_90"
   export CUDAARCHS="${CUDAARCHS};35-real;89-real;90"
+  # Recommended by compiler error for CUDA 11.8 because too many objects to link
+  export LDFLAGS="${LDFLAGS} --no-relax"
 fi
 
 if [[ "$cuda_compiler_version" == "12.0" ]]; then
