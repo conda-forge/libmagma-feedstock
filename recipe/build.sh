@@ -6,10 +6,10 @@ set -exv
 # Only about 7 virtual archs can be built 6 hours for CUDA 11
 # Only about 8 archs fit into the default 2GB address space; could use
 # -mcmodel=medium to increase address space
-if [[ "$target_platform" == "linux-64"]] || [[ "$target_platform" == "linux-ppc64le"]]; then
+if [[ "$target_platform" == "linux-64" ]] || [[ "$target_platform" == "linux-ppc64le" ]]; then
   export CXXFLAGS="${CXXFLAGS} -mcmodel=medium"
 fi
-if [[ "$target_platform" == "linux-aarch64"]]; then
+if [[ "$target_platform" == "linux-aarch64" ]]; then
   export CXXFLAGS="${CXXFLAGS} -mcmodel=small"
 fi
 
