@@ -38,6 +38,9 @@ export CXXFLAGS="${CXXFLAGS//-std=c++17/-std=c++11}"
 # Redirect it so that the flags are added to nvcc calls
 export CUDAFLAGS="${CUDAFLAGS} ${CUDA_CFLAGS}"
 
+# Compress SASS and PTX in the binary to reduce disk usage
+export CUDAFLAGS="${CUDAFLAGS} -Xfatbin -compress-all"
+
 mkdir build
 cd build
 
@@ -63,3 +66,5 @@ cmake --install .  --strip
 
 rm -rf $PREFIX/include/*
 rm $PREFIX/lib/pkgconfig/magma.pc
+
+ls -alh $PREFIX/lib/

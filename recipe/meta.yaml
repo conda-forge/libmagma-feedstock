@@ -98,7 +98,7 @@ source:
   - path: make.inc
 
 build:
-  number: 0
+  number: 1
   skip: true  # [cuda_compiler_version == "None"]
   skip: true  # [cuda_compiler_version == "11.2"]
   run_exports:
