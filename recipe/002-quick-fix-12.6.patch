@@ -1,0 +1,15 @@
+diff --git a/magmablas/zgbtf2_kernels.cu b/magmablas/zgbtf2_kernels.cu
+index 59d3f489..b83ba808 100644
+--- a/magmablas/zgbtf2_kernels.cu
++++ b/magmablas/zgbtf2_kernels.cu
+@@ -12,6 +12,10 @@
+
+ #include "magma_internal.h"
+ #if   defined(MAGMA_HAVE_CUDA)
++#if CUDA_VERSION >= 12060
++#undef max
++#undef min
++#endif
+ #include <cooperative_groups.h>
+ namespace cg = cooperative_groups;
+ #elif defined(MAGMA_HAVE_HIP)
