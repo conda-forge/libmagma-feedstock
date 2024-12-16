@@ -41,7 +41,7 @@ cmake %SRC_DIR% ^
   -DGPU_TARGET="%CUDA_ARCH_LIST%" ^
   -DMAGMA_ENABLE_CUDA:BOOL=ON ^
   -DUSE_FORTRAN:BOOL=OFF ^
-  -DCMAKE_CUDA_FLAGS="--use-local-env" ^
+  -DCMAKE_CUDA_FLAGS="--use-local-env -Xfatbin -compress-all" ^
   -DCMAKE_CUDA_SEPARABLE_COMPILATION:BOOL=OFF
 if errorlevel 1 exit /b 1
 

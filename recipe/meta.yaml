@@ -94,11 +94,13 @@ source:
   - url: https://icl.utk.edu/projectsfiles/magma/downloads/magma-{{ version }}.tar.gz
     sha256: f4e5e75350743fe57f49b615247da2cc875e5193cc90c11b43554a7c82cc4348
     patches:
-      - optional-install.patch
+      - 001-optional-install.patch
+      # https://github.com/icl-utk-edu/magma/pull/8
+      - 002-quick-fix-12.6.patch
   - path: make.inc
 
 build:
-  number: 0
+  number: 1
   skip: true  # [cuda_compiler_version == "None"]
   skip: true  # [cuda_compiler_version == "11.2"]
   run_exports:
