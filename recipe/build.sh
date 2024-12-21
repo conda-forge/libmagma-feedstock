@@ -18,16 +18,18 @@ export CUDAARCHS="50-real;60-real;70-real;80-real"
 if [[ "$cuda_compiler_version" == "11.2" ]]; then
   export CUDA_ARCH_LIST="${CUDA_ARCH_LIST},sm_35,sm_86"
   export CUDAARCHS="${CUDAARCHS};35-real;86"
-fi
 
-if [[ "$cuda_compiler_version" == "11.8" ]]; then
+elif [[ "$cuda_compiler_version" == "11.8" ]]; then
   export CUDA_ARCH_LIST="${CUDA_ARCH_LIST},sm_35,sm_89,sm_90"
   export CUDAARCHS="${CUDAARCHS};35-real;89-real;90"
-fi
 
-if [[ "$cuda_compiler_version" == "12.0" ]]; then
+elif [[ "$cuda_compiler_version" == "12.0" || "$cuda_compiler_version" == "12.6" ]]; then
   export CUDA_ARCH_LIST="${CUDA_ARCH_LIST},sm_75,sm_89,sm_90"
   export CUDAARCHS="${CUDAARCHS};75-real;89-real;90"
+
+else
+  echo "Unsupported CUDA version. Please update build.sh"
+  exit 1
 fi
 
 # Remove CXX standard flags added by conda-forge. std=c++11 is required to
