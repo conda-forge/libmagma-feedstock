@@ -12,6 +12,9 @@ set -exv
 # 12.x supports archs 5.0 - 9.0
 
 # Duplicate lists because of https://bitbucket.org/icl/magma/pull-requests/32
+# Use the same arches as https://github.com/pytorch/pytorch/blob/07fa6e2c8b003319f85a469307f1b1dd73f6026c/.ci/magma/Makefile#L7
+# Only difference is 37 is replaced with 35.
+
 export CUDA_ARCH_LIST="sm_50,sm_60,sm_70,sm_80"
 export CUDAARCHS="50-real;60-real;70-real;80-real"
 
@@ -20,12 +23,12 @@ if [[ "$cuda_compiler_version" == "11.2" ]]; then
   export CUDAARCHS="${CUDAARCHS};35-real;86"
 
 elif [[ "$cuda_compiler_version" == "11.8" ]]; then
-  export CUDA_ARCH_LIST="${CUDA_ARCH_LIST},sm_35,sm_89,sm_90"
-  export CUDAARCHS="${CUDAARCHS};35-real;89-real;90"
+  export CUDA_ARCH_LIST="${CUDA_ARCH_LIST},sm_35,sm_86,sm_90"
+  export CUDAARCHS="${CUDAARCHS};35-real;86-real;90"
 
-elif [[ "$cuda_compiler_version" == "12.0" || "$cuda_compiler_version" == "12.6" ]]; then
-  export CUDA_ARCH_LIST="${CUDA_ARCH_LIST},sm_75,sm_89,sm_90"
-  export CUDAARCHS="${CUDAARCHS};75-real;89-real;90"
+elif [[ "$cuda_compiler_version" == "12."* ]]; then
+  export CUDA_ARCH_LIST="${CUDA_ARCH_LIST},sm_86,sm_90"
+  export CUDAARCHS="${CUDAARCHS};86-real;90"
 
 else
   echo "Unsupported CUDA version. Please update build.sh"
