@@ -27,10 +27,10 @@ jobs:
             runs_on: ['cirun-openstack-gpu-large--${{ github.run_id }}-linux_64_c_compiler_version11cuda_c_h79df638478', 'linux', 'x64', 'self-hosted']
             DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64-cuda11.8:ubi8
             CONDA_FORGE_DOCKER_RUN_ARGS: "--gpus all"
-          - CONFIG: linux_64_c_compiler_version12cuda_compilercuda-nvcccuda_compiler_version12.6cxx_compiler_version12
+          - CONFIG: linux_64_c_compiler_version13cuda_compilercuda-nvcccuda_compiler_version12.6cxx_compiler_version13
             UPLOAD_PACKAGES: True
             os: ubuntu
-            runs_on: ['cirun-openstack-gpu-large--${{ github.run_id }}-linux_64_c_compiler_version12cuda_c_h04d9ceec90', 'linux', 'x64', 'self-hosted']
+            runs_on: ['cirun-openstack-gpu-large--${{ github.run_id }}-linux_64_c_compiler_version13cuda_c_h128740963d', 'linux', 'x64', 'self-hosted']
             DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma9
             CONDA_FORGE_DOCKER_RUN_ARGS: "--gpus all"
           - CONFIG: linux_aarch64_c_compiler_version11cuda_compilernvcccuda_compiler_version11.8cxx_compiler_version11
@@ -39,10 +39,10 @@ jobs:
             runs_on: ['cirun-openstack-gpu-large--${{ github.run_id }}-linux_aarch64_c_compiler_version11c_h16465f209e', 'linux', 'x64', 'self-hosted']
             DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64-cuda11.8:ubi8
             CONDA_FORGE_DOCKER_RUN_ARGS: "--gpus all"
-          - CONFIG: linux_aarch64_c_compiler_version12cuda_compilercuda-nvcccuda_compiler_version12.6cxx_compiler_version12
+          - CONFIG: linux_aarch64_c_compiler_version13cuda_compilercuda-nvcccuda_compiler_version12.6cxx_compiler_version13
             UPLOAD_PACKAGES: True
             os: ubuntu
-            runs_on: ['cirun-openstack-gpu-large--${{ github.run_id }}-linux_aarch64_c_compiler_version12c_hf2672871f3', 'linux', 'x64', 'self-hosted']
+            runs_on: ['cirun-openstack-gpu-large--${{ github.run_id }}-linux_aarch64_c_compiler_version13c_h50dc5357dd', 'linux', 'x64', 'self-hosted']
             DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma9
             CONDA_FORGE_DOCKER_RUN_ARGS: "--gpus all"
           - CONFIG: linux_ppc64le_c_compiler_version11cuda_compilernvcccuda_compiler_version11.8cxx_compiler_version11
