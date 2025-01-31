@@ -84,7 +84,7 @@
 
 {% set cuda_major = environ.get("cuda_compiler_version", "11.2").split(".")[0]|int %}
 
-{% set version = "2.8.0" %}
+{% set version = "2.9.0" %}
 
 package:
   name: libmagma
@@ -92,17 +92,17 @@ package:
 
 source:
   - url: https://icl.utk.edu/projectsfiles/magma/downloads/magma-{{ version }}.tar.gz
-    sha256: f4e5e75350743fe57f49b615247da2cc875e5193cc90c11b43554a7c82cc4348
+    sha256: ff77fd3726b3dfec3bfb55790b06480aa5cc384396c2db35c56fdae4a82c641c
     patches:
       - 001-optional-install.patch
-      # https://github.com/icl-utk-edu/magma/pull/8
-      - 002-quick-fix-12.6.patch
   - path: make.inc
 
 build:
-  number: 2
+  number: 0
   skip: true  # [cuda_compiler_version == "None"]
   skip: true  # [cuda_compiler_version == "11.2"]
+  # debugging skips below
+  # skip: true  # [not linux64 or cuda_compiler_version != "12.6"]
   run_exports:
     - {{ pin_subpackage('libmagma', max_pin='x.x.x') }}
 
@@ -157,8 +157,8 @@ test:
 {% endfor %}
 
 about:
-  home: http://icl.cs.utk.edu/magma/software/index.html
-  dev_url: https://bitbucket.org/icl/magma
+  home: https://icl.utk.edu/magma/
+  dev_url:  https://github.com/icl-utk-edu/magma/
   summary: Matrix Algebra on GPU and Multicore Architectures
   license: BSD-3-Clause
   license_file: COPYRIGHT
