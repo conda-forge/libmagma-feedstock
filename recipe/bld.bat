@@ -14,8 +14,8 @@ if "%cuda_compiler_version%"=="11.2" (
 )
 
 if "%cuda_compiler_version%"=="11.8" (
-  set "CUDA_ARCH_LIST=sm_35,%CUDA_ARCH_LIST%,sm_90"
-  set "CUDAARCHS=%CUDAARCHS%;35-virtual;90-virtual"
+  set "CUDA_ARCH_LIST=%CUDA_ARCH_LIST%,sm_90"
+  set "CUDAARCHS=%CUDAARCHS%;90-virtual"
 )
 
 if "%cuda_compiler_version%"=="12.0" (
