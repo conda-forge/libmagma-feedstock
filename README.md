@@ -3,13 +3,13 @@ About libmagma-feedstock
 
 Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/libmagma-feedstock/blob/main/LICENSE.txt)
 
-Home: http://icl.cs.utk.edu/magma/software/index.html
+Home: https://icl.utk.edu/magma/
 
 Package license: BSD-3-Clause
 
 Summary: Matrix Algebra on GPU and Multicore Architectures
 
-Development: https://bitbucket.org/icl/magma
+Development: https://github.com/icl-utk-edu/magma/
 
 Current build status
 ====================
