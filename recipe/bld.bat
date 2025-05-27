@@ -45,7 +45,8 @@ cmake %SRC_DIR% ^
   -DMAGMA_ENABLE_CUDA:BOOL=ON ^
   -DUSE_FORTRAN:BOOL=OFF ^
   -DCMAKE_CUDA_FLAGS="--use-local-env -Xfatbin -compress-all" ^
-  -DCMAKE_CUDA_SEPARABLE_COMPILATION:BOOL=OFF
+  -DCMAKE_CUDA_SEPARABLE_COMPILATION:BOOL=OFF ^
+  %CMAKE_ARGS%
 if errorlevel 1 exit /b 1
 
 cmake --build . ^
