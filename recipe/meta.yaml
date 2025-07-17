@@ -100,9 +100,8 @@ source:
 build:
   number: 2
   skip: true  # [cuda_compiler_version == "None"]
-  skip: true  # [cuda_compiler_version == "11.2"]
   # debugging skips below
-  # skip: true  # [not linux64 or cuda_compiler_version != "12.6"]
+  # skip: true  # [not (linux64 and cuda_compiler_version == "12.9")]
   run_exports:
     - {{ pin_subpackage('libmagma', max_pin='x.x.x') }}
 
