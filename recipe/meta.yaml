@@ -82,8 +82,6 @@
   'z_v1_map'
 ] %}
 
-{% set cuda_major = environ.get("cuda_compiler_version", "11.2").split(".")[0]|int %}
-
 {% set version = "2.9.0" %}
 
 package:
@@ -122,11 +120,9 @@ requirements:
     - python
   host:
     - cuda-version {{ cuda_compiler_version }}
-{% if cuda_major == 12 %}
     - cuda-cudart-dev
     - libcublas-dev
     - libcusparse-dev
-{% endif %}
     - liblapack
     - libblas
     - nomkl
