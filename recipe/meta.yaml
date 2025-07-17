@@ -111,7 +111,7 @@ requirements:
     - {{ compiler('cxx') }}
     - {{ compiler('cuda') }}
     - {{ stdlib('c') }}
-    - cmake >=3.20
+    - cmake >=3.20,<4
     - libgomp  # [linux]
     - llvm-openmp  # [osx]
     - m2-coreutils  # [win]
