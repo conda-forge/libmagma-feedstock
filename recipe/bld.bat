@@ -19,8 +19,8 @@ if "%cuda_compiler_version%"=="11.8" (
 )
 
 if "%cuda_compiler_version%"=="12.0" (
-  set "CUDA_ARCH_LIST=%CUDA_ARCH_LIST%,sm_90"
-  set "CUDAARCHS=%CUDAARCHS%;90-virtual"
+  set "CUDA_ARCH_LIST=%CUDA_ARCH_LIST%,sm_90,sm_100,sm_120"
+  set "CUDAARCHS=%CUDAARCHS%;90-virtual;100-virtual;120-virtual"
 )
 
 md build
