@@ -8,19 +8,17 @@
 set "CUDA_ARCH_LIST=sm_50,sm_60,sm_70,sm_80"
 set "CUDAARCHS=50-virtual;60-virtual;70-virtual;80-virtual"
 
-if "%cuda_compiler_version%"=="11.2" (
-  set "CUDA_ARCH_LIST=sm_35,%CUDA_ARCH_LIST%"
-  set "CUDAARCHS=%CUDAARCHS%;35-virtual"
-)
-
 if "%cuda_compiler_version%"=="11.8" (
   set "CUDA_ARCH_LIST=%CUDA_ARCH_LIST%,sm_90"
   set "CUDAARCHS=%CUDAARCHS%;90-virtual"
-)
 
-if "%cuda_compiler_version%"=="12.0" (
+) else if "%cuda_compiler_version:~0,3%"=="12." (
   set "CUDA_ARCH_LIST=%CUDA_ARCH_LIST%,sm_90,sm_100,sm_120"
   set "CUDAARCHS=%CUDAARCHS%;90-virtual;100-virtual;120-virtual"
+
+) else (
+  echo Unsupported CUDA version. Please update build.bat
+  exit /b 1
 )
 
 md build
