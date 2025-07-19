@@ -3,7 +3,6 @@ azure:
   store_build_artifacts: true
 build_platform:
   linux_aarch64: linux_64
-  linux_ppc64le: linux_64
 conda_build:
   error_overlinking: true
   pkg_format: '2'
@@ -19,4 +18,3 @@ github_actions:
 provider:
   linux_64: github_actions
   linux_aarch64: default
-  linux_ppc64le: default
