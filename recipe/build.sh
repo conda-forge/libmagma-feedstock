@@ -18,17 +18,13 @@ set -exv
 export CUDA_ARCH_LIST="sm_50,sm_60,sm_70,sm_80"
 export CUDAARCHS="50-real;60-real;70-real;80-real"
 
-if [[ "$cuda_compiler_version" == "11.2" ]]; then
-  export CUDA_ARCH_LIST="${CUDA_ARCH_LIST},sm_35,sm_86"
-  export CUDAARCHS="${CUDAARCHS};35-real;86"
-
-elif [[ "$cuda_compiler_version" == "11.8" ]]; then
+if [[ "$cuda_compiler_version" == "11.8" ]]; then
   export CUDA_ARCH_LIST="${CUDA_ARCH_LIST},sm_35,sm_86,sm_90"
   export CUDAARCHS="${CUDAARCHS};35-real;86-real;90"
 
 elif [[ "$cuda_compiler_version" == "12."* ]]; then
-  export CUDA_ARCH_LIST="${CUDA_ARCH_LIST},sm_86,sm_90"
-  export CUDAARCHS="${CUDAARCHS};86-real;90"
+  export CUDA_ARCH_LIST="${CUDA_ARCH_LIST},sm_86,sm_90,sm_100,sm_120"
+  export CUDAARCHS="${CUDAARCHS};86-real;90-real;100-real;120"
 
 else
   echo "Unsupported CUDA version. Please update build.sh"

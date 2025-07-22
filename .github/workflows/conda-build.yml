@@ -21,10 +21,16 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - CONFIG: linux_64_c_compiler_version13cuda_compilercuda-nvcccuda_compiler_version12.6cxx_compiler_version13
+          - CONFIG: linux_64_cuda_compiler_version12.9
             UPLOAD_PACKAGES: True
             os: ubuntu
-            runs_on: ['cirun-openstack-gpu-large--${{ github.run_id }}-linux_64_c_compiler_version13cuda_c_h128740963d', 'linux', 'x64', 'self-hosted']
+            runs_on: ['cirun-openstack-gpu-large--${{ github.run_id }}-linux_64_cuda_compiler_version12.9', 'linux', 'x64', 'self-hosted']
+            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma9
+            CONDA_FORGE_DOCKER_RUN_ARGS: "--gpus all"
+          - CONFIG: linux_aarch64_cuda_compiler_version12.9
+            UPLOAD_PACKAGES: True
+            os: ubuntu
+            runs_on: ['cirun-openstack-gpu-large--${{ github.run_id }}-linux_aarch64_cuda_compiler_version12.9', 'linux', 'x64', 'self-hosted']
             DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma9
             CONDA_FORGE_DOCKER_RUN_ARGS: "--gpus all"
     steps:
@@ -33,6 +39,7 @@ jobs:
       uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
 
     - name: Build on Linux
+      id: build-linux
       if: matrix.os == 'ubuntu'
       env:
         CONFIG: ${{ matrix.CONFIG }}
@@ -45,8 +52,10 @@ jobs:
         STAGING_BINSTAR_TOKEN: ${{ secrets.STAGING_BINSTAR_TOKEN }}
       shell: bash
       run: |
-        echo "::group::Configure binfmt_misc"
-        docker run --rm --privileged multiarch/qemu-user-static:register --reset --credential yes
+        if [[ "$(uname -m)" == "x86_64" ]]; then
+          echo "::group::Configure binfmt_misc"
+          docker run --rm --privileged multiarch/qemu-user-static:register --reset --credential yes
+        fi
         export flow_run_id="github_$GITHUB_RUN_ID"
         export remote_url="https://github.com/$GITHUB_REPOSITORY"
         export sha="$GITHUB_SHA"
@@ -61,6 +70,7 @@ jobs:
         ./.scripts/run_docker_build.sh
 
     - name: Build on macOS
+      id: build-macos
       if: matrix.os == 'macos'
       env:
         CONFIG: ${{ matrix.CONFIG }}
@@ -84,6 +94,8 @@ jobs:
         ./.scripts/run_osx_build.sh
 
     - name: Build on windows
+      id: build-windows
+      if: matrix.os == 'windows'
       shell: cmd
       run: |
         set "flow_run_id=github_%GITHUB_RUN_ID%"
@@ -91,6 +103,9 @@ jobs:
         set "sha=%GITHUB_SHA%"
         call ".scripts\run_win_build.bat"
       env:
+        # default value; make it explicit, as it needs to match with artefact
+        # generation below. Not configurable for now, can be revisited later
+        CONDA_BLD_DIR: C:\bld
         MINIFORGE_HOME: D:\Miniforge
         PYTHONUNBUFFERED: 1
         CONFIG: ${{ matrix.CONFIG }}
@@ -99,4 +114,3 @@ jobs:
         BINSTAR_TOKEN: ${{ secrets.BINSTAR_TOKEN }}
         FEEDSTOCK_TOKEN: ${{ secrets.FEEDSTOCK_TOKEN }}
         STAGING_BINSTAR_TOKEN: ${{ secrets.STAGING_BINSTAR_TOKEN }}
-      if: matrix.os == 'windows'
