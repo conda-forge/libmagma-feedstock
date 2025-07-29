@@ -56,12 +56,6 @@ cmake $SRC_DIR \
 cmake --build . \
     --config Release \
     --parallel ${CPU_COUNT} \
-    --target magma \
     --verbose
 
 cmake --install .  --strip
-
-rm -rf $PREFIX/include/*
-rm $PREFIX/lib/pkgconfig/magma.pc
-
-ls -alh $PREFIX/lib/
