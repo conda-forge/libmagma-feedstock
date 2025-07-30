@@ -18,3 +18,4 @@ github_actions:
 provider:
   linux_64: github_actions
   linux_aarch64: default
+  win_64: github_actions
