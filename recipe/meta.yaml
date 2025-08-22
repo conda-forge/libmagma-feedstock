@@ -116,6 +116,7 @@ requirements:
   host:
     - cuda-version {{ cuda_compiler_version }}
     - cuda-cudart-dev
+    - cuda-profiler-api
     - libcublas-dev
     - libcusparse-dev
     - liblapack
@@ -140,6 +141,7 @@ outputs:
         - llvm-openmp  # [osx]
       host:
         - cuda-version {{ cuda_compiler_version }}
+        - cuda-profiler-api
         - cuda-cudart-dev
         - libcublas-dev
         - libcusparse-dev
