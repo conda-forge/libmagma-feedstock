@@ -24,7 +24,7 @@ jobs:
           - CONFIG: win_64_cuda_compiler_version12.9
             UPLOAD_PACKAGES: True
             os: windows
-            runs_on: ['cirun-openstack-gpu-large--${{ github.run_id }}-win_64_cuda_compiler_version12.9', 'windows', 'x64', 'self-hosted']
+            runs_on: ['cirun-azure-windows-2xlarge--${{ github.run_id }}-win_64_cuda_compiler_version12.9', 'windows', 'x64', 'self-hosted']
     steps:
 
     - name: Checkout code
