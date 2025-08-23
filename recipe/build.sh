@@ -42,7 +42,6 @@ cmake $SRC_DIR \
   -DBUILD_SHARED_LIBS:BOOL=ON \
   -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_INSTALL_PREFIX=$PREFIX \
-  -DGPU_TARGET=$CUDA_ARCH_LIST \
   -DMAGMA_ENABLE_CUDA:BOOL=ON \
   -DUSE_FORTRAN:BOOL=OFF \
   -DCMAKE_CUDA_SEPARABLE_COMPILATION:BOOL=OFF \
@@ -52,6 +51,7 @@ cmake $SRC_DIR \
 cmake --build . \
     --config Release \
     --parallel ${CPU_COUNT} \
+    --target magma magma_sparse \
     --verbose
 
 cmake --install .  --strip
