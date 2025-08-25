@@ -107,10 +107,11 @@ requirements:
     - {{ stdlib('c') }}
     - cmake >=3.30,<4
     - libgomp  # [linux]
-    - m2-coreutils  # [win]
-    - m2-make  # [win]
-    - m2-perl  # [win]
-    - make  # [unix]
+    # Commented out tools needed when doing source-code generation
+    # - m2-coreutils  # [win]
+    # - m2-make  # [win]
+    # - m2-perl  # [win]
+    # - make  # [unix]
     - ninja
   host:
     - cuda-version {{ cuda_compiler_version }}
