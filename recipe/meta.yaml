@@ -107,7 +107,6 @@ requirements:
     - {{ stdlib('c') }}
     - cmake >=3.30,<4
     - libgomp  # [linux]
-    - llvm-openmp  # [not linux]
     - m2-coreutils  # [win]
     - m2-make  # [win]
     - m2-perl  # [win]
@@ -140,7 +139,6 @@ outputs:
         - {{ compiler('cuda') }}
         - {{ stdlib('c') }}
         - libgomp  # [linux]
-        - llvm-openmp  # [not linux]
       host:
         - cuda-version {{ cuda_compiler_version }}
         - cuda-cudart-dev
@@ -175,7 +173,6 @@ outputs:
         - {{ compiler('cuda') }}
         - {{ stdlib('c') }}
         - libgomp  # [linux]
-        - llvm-openmp  # [not linux]
       host:
         - cuda-version {{ cuda_compiler_version }}
         - cuda-cudart-dev
@@ -218,7 +215,6 @@ outputs:
         - {{ compiler('cuda') }}
         - {{ stdlib('c') }}
         - libgomp  # [linux]
-        - llvm-openmp  # [not linux]
       host:
         - cuda-version {{ cuda_compiler_version }}
         - nomkl

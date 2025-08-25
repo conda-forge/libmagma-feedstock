@@ -22,8 +22,7 @@ cd build
 if errorlevel 1 exit /b 1
 
 :: Must add --use-local-env to NVCC_FLAGS otherwise NVCC autoconfigs the host
-:: compiler to cl.exe instead of the full path. MSVC does not accept a
-:: With vs2022, compilation fails if openmp llvm runtime isn't used
+:: compiler to cl.exe instead of the full path.
 cmake %SRC_DIR% ^
   -G "Ninja" ^
   -DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS:BOOL=ON ^
@@ -34,7 +33,6 @@ cmake %SRC_DIR% ^
   -DUSE_FORTRAN:BOOL=OFF ^
   -DCMAKE_CUDA_FLAGS="--use-local-env -Xfatbin -compress-all" ^
   -DCMAKE_CUDA_SEPARABLE_COMPILATION:BOOL=OFF ^
-  -DOpenMP_RUNTIME_MSVC=llvm ^
   %CMAKE_ARGS%
 if errorlevel 1 exit /b 1
 
