@@ -38,6 +38,7 @@ cmake %SRC_DIR% ^
   %CMAKE_ARGS%
 if errorlevel 1 exit /b 1
 
+:: Explicitly name build targets to avoid building tests
 cmake --build . ^
     --config Release ^
     --parallel %CPU_COUNT% ^
