@@ -30,6 +30,19 @@ Development: https://github.com/icl-utk-edu/magma/
 
 This is a runtime package only. Developers should install libmagma-dev to build with MAGMA.
 
+About libmagma_sparse
+---------------------
+
+Home: https://icl.utk.edu/magma/
+
+Package license: BSD-3-Clause
+
+Summary: The Matrix Algebra on GPU and Multicore Architectures (MAGMA) runtime libraries.
+
+Development: https://github.com/icl-utk-edu/magma/
+
+This is a runtime package only. Developers should install libmagma-dev to build with MAGMA.
+
 Current build status
 ====================
 
@@ -44,6 +57,7 @@ Current release info
 | --- | --- | --- | --- |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-libmagma-green.svg)](https://anaconda.org/conda-forge/libmagma) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libmagma.svg)](https://anaconda.org/conda-forge/libmagma) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libmagma.svg)](https://anaconda.org/conda-forge/libmagma) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libmagma.svg)](https://anaconda.org/conda-forge/libmagma) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-libmagma--dev-green.svg)](https://anaconda.org/conda-forge/libmagma-dev) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libmagma-dev.svg)](https://anaconda.org/conda-forge/libmagma-dev) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libmagma-dev.svg)](https://anaconda.org/conda-forge/libmagma-dev) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libmagma-dev.svg)](https://anaconda.org/conda-forge/libmagma-dev) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-libmagma__sparse-green.svg)](https://anaconda.org/conda-forge/libmagma_sparse) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libmagma_sparse.svg)](https://anaconda.org/conda-forge/libmagma_sparse) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libmagma_sparse.svg)](https://anaconda.org/conda-forge/libmagma_sparse) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libmagma_sparse.svg)](https://anaconda.org/conda-forge/libmagma_sparse) |
 
 Installing libmagma
 ===================
@@ -55,16 +69,16 @@ conda config --add channels conda-forge
 conda config --set channel_priority strict
 ```
 
-Once the `conda-forge` channel has been enabled, `libmagma, libmagma-dev` can be installed with `conda`:
+Once the `conda-forge` channel has been enabled, `libmagma, libmagma-dev, libmagma_sparse` can be installed with `conda`:
 
 ```
-conda install libmagma libmagma-dev
+conda install libmagma libmagma-dev libmagma_sparse
 ```
 
 or with `mamba`:
 
 ```
-mamba install libmagma libmagma-dev
+mamba install libmagma libmagma-dev libmagma_sparse
 ```
 
 It is possible to list all of the versions of `libmagma` available on your platform with `conda`:
