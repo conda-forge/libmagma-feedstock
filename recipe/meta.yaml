@@ -131,6 +131,8 @@ outputs:
         - Library\bin  # [win]
       exclude:
         - lib/pkgconfig  # [unix]
+        - lib/libmagma_sparse.so  # [linux]
+        - Library\bin\magma_sparse.dll  # [win]
     requirements:
       build:
         - {{ compiler('c') }}
@@ -141,7 +143,6 @@ outputs:
         - llvm-openmp  # [not linux]
       host:
         - cuda-version {{ cuda_compiler_version }}
-        - cuda-profiler-api
         - cuda-cudart-dev
         - libcublas-dev
         - libcusparse-dev
@@ -152,6 +153,41 @@ outputs:
       commands:
         - test -f $PREFIX/lib/libmagma${SHLIB_EXT}                 # [unix]
         - if not exist %LIBRARY_PREFIX%\bin\magma.dll exit 1       # [win]
+    about:
+      home: https://icl.utk.edu/magma/
+      dev_url:  https://github.com/icl-utk-edu/magma/
+      summary: The Matrix Algebra on GPU and Multicore Architectures (MAGMA) runtime libraries.
+      description: >-
+        This is a runtime package only. Developers should install libmagma-dev to build with
+        MAGMA.
+      license: BSD-3-Clause
+      license_file: COPYRIGHT
+
+  - name: libmagma_sparse
+    files:
+      include:
+        - lib/libmagma_sparse.so  # [linux]
+        - Library\bin\magma_sparse.dll  # [win]
+    requirements:
+      build:
+        - {{ compiler('c') }}
+        - {{ compiler('cxx') }}
+        - {{ compiler('cuda') }}
+        - {{ stdlib('c') }}
+        - libgomp  # [linux]
+        - llvm-openmp  # [not linux]
+      host:
+        - cuda-version {{ cuda_compiler_version }}
+        - cuda-cudart-dev
+        - libcusparse-dev
+        - liblapack
+        - libblas
+        - nomkl
+        - {{ pin_subpackage('libmagma', exact=True) }}
+      run:
+        - {{ pin_subpackage('libmagma', exact=True) }}
+    test:
+      commands:
         - test -f $PREFIX/lib/libmagma_sparse${SHLIB_EXT}        # [unix]
         - if not exist %LIBRARY_PREFIX%\bin\magma_sparse.dll exit 1    # [win]
     about:
@@ -174,6 +210,7 @@ outputs:
     build:
       run_exports:
         - {{ pin_subpackage('libmagma', max_pin='x.x.x') }}
+        - {{ pin_subpackage('libmagma_sparse', max_pin='x.x.x') }}
     requirements:
       build:
         - {{ compiler('c') }}
@@ -186,8 +223,10 @@ outputs:
         - cuda-version {{ cuda_compiler_version }}
         - nomkl
         - {{ pin_subpackage('libmagma', exact=True) }}
+        - {{ pin_subpackage('libmagma_sparse', exact=True) }}
       run:
         - {{ pin_subpackage('libmagma', exact=True) }}  # [not win]
+        - {{ pin_subpackage('libmagma_sparse', exact=True) }}  # [not win]
     test:
         commands:
           - test -f $PREFIX/include/magma.h                            # [unix]
