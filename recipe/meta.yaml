@@ -157,7 +157,7 @@ outputs:
       dev_url:  https://github.com/icl-utk-edu/magma/
       summary: The Matrix Algebra on GPU and Multicore Architectures (MAGMA) runtime libraries.
       description: >-
-        This is a runtime package only. Developers should install libmagma-dev to build with
+        This is a runtime package only. Developers should install libmagma-devel to build with
         MAGMA.
       license: BSD-3-Clause
       license_file: COPYRIGHT
@@ -193,12 +193,12 @@ outputs:
       dev_url:  https://github.com/icl-utk-edu/magma/
       summary: The Matrix Algebra on GPU and Multicore Architectures (MAGMA) runtime libraries.
       description: >-
-        This is a runtime package only. Developers should install libmagma-dev to build with
+        This is a runtime package only. Developers should install libmagma-devel to build with
         MAGMA.
       license: BSD-3-Clause
       license_file: COPYRIGHT
 
-  - name: libmagma-dev
+  - name: libmagma-devel
     files:
       include:
         - include  # [unix]
