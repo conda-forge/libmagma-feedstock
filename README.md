@@ -3,58 +3,51 @@ About libmagma-feedstock
 
 Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/libmagma-feedstock/blob/main/LICENSE.txt)
 
+
+About libmagma
+--------------
+
 Home: https://icl.utk.edu/magma/
 
 Package license: BSD-3-Clause
 
-Summary: Matrix Algebra on GPU and Multicore Architectures
+Summary: Matrix Algebra on GPU and Multicore Architectures (MAGMA)
 
 Development: https://github.com/icl-utk-edu/magma/
+
+Matrix Algebra on GPU and Multi-core Architectures (MAGMA) is a collection of next-generation linear algebra libraries for heterogeneous computing. MAGMA supports interfaces for current linear algebra packages and standards (e.g., LAPACK and BLAS) to enable computational scientists to easily port any linear algebra–reliant software component to heterogeneous computing systems. MAGMA enables applications to fully exploit the power of current hybrid systems of many-core CPUs and multi-GPUs/coprocessors to deliver the fastest possible time to accurate solutions within given energy constraints.
+
+About libmagma
+--------------
+
+Home: https://icl.utk.edu/magma/
+
+Package license: BSD-3-Clause
+
+Summary: The Matrix Algebra on GPU and Multicore Architectures (MAGMA) runtime libraries.
+
+Development: https://github.com/icl-utk-edu/magma/
+
+This is a runtime package only. Developers should install libmagma-dev to build with MAGMA.
+
+About libmagma_sparse
+---------------------
+
+Home: https://icl.utk.edu/magma/
+
+Package license: BSD-3-Clause
+
+Summary: The Matrix Algebra on GPU and Multicore Architectures (MAGMA) runtime libraries.
+
+Development: https://github.com/icl-utk-edu/magma/
+
+This is a runtime package only. Developers should install libmagma-dev to build with MAGMA.
 
 Current build status
 ====================
 
 
 <table>
-    
-  <tr>
-    <td>Azure</td>
-    <td>
-      <details>
-        <summary>
-          <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=18893&branchName=main">
-            <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/libmagma-feedstock?branchName=main">
-          </a>
-        </summary>
-        <table>
-          <thead><tr><th>Variant</th><th>Status</th></tr></thead>
-          <tbody><tr>
-              <td>linux_64_cuda_compiler_version12.9</td>
-              <td>
-                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=18893&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/libmagma-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_64_cuda_compiler_version12.9" alt="variant">
-                </a>
-              </td>
-            </tr><tr>
-              <td>linux_aarch64_cuda_compiler_version12.9</td>
-              <td>
-                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=18893&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/libmagma-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_aarch64_cuda_compiler_version12.9" alt="variant">
-                </a>
-              </td>
-            </tr><tr>
-              <td>win_64_cuda_compiler_version12.9</td>
-              <td>
-                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=18893&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/libmagma-feedstock?branchName=main&jobName=win&configuration=win%20win_64_cuda_compiler_version12.9" alt="variant">
-                </a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </details>
-    </td>
-  </tr>
 </table>
 
 Current release info
@@ -63,6 +56,8 @@ Current release info
 | Name | Downloads | Version | Platforms |
 | --- | --- | --- | --- |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-libmagma-green.svg)](https://anaconda.org/conda-forge/libmagma) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libmagma.svg)](https://anaconda.org/conda-forge/libmagma) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libmagma.svg)](https://anaconda.org/conda-forge/libmagma) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libmagma.svg)](https://anaconda.org/conda-forge/libmagma) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-libmagma--dev-green.svg)](https://anaconda.org/conda-forge/libmagma-dev) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libmagma-dev.svg)](https://anaconda.org/conda-forge/libmagma-dev) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libmagma-dev.svg)](https://anaconda.org/conda-forge/libmagma-dev) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libmagma-dev.svg)](https://anaconda.org/conda-forge/libmagma-dev) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-libmagma__sparse-green.svg)](https://anaconda.org/conda-forge/libmagma_sparse) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libmagma_sparse.svg)](https://anaconda.org/conda-forge/libmagma_sparse) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libmagma_sparse.svg)](https://anaconda.org/conda-forge/libmagma_sparse) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libmagma_sparse.svg)](https://anaconda.org/conda-forge/libmagma_sparse) |
 
 Installing libmagma
 ===================
@@ -74,16 +69,16 @@ conda config --add channels conda-forge
 conda config --set channel_priority strict
 ```
 
-Once the `conda-forge` channel has been enabled, `libmagma` can be installed with `conda`:
+Once the `conda-forge` channel has been enabled, `libmagma, libmagma-dev, libmagma_sparse` can be installed with `conda`:
 
 ```
-conda install libmagma
+conda install libmagma libmagma-dev libmagma_sparse
 ```
 
 or with `mamba`:
 
 ```
-mamba install libmagma
+mamba install libmagma libmagma-dev libmagma_sparse
 ```
 
 It is possible to list all of the versions of `libmagma` available on your platform with `conda`:

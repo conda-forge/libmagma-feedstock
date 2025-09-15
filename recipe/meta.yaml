@@ -85,23 +85,19 @@
 {% set version = "2.9.0" %}
 
 package:
-  name: libmagma
+  name: libmagma-split
   version: {{ version }}
 
 source:
   - url: https://icl.utk.edu/projectsfiles/magma/downloads/magma-{{ version }}.tar.gz
     sha256: ff77fd3726b3dfec3bfb55790b06480aa5cc384396c2db35c56fdae4a82c641c
-    patches:
-      - 001-optional-install.patch
-  - path: make.inc
 
 build:
-  number: 2
+  number: 3
   skip: true  # [cuda_compiler_version == "None"]
   # debugging skips below
   # skip: true  # [not (linux64 and cuda_compiler_version == "12.9")]
-  run_exports:
-    - {{ pin_subpackage('libmagma', max_pin='x.x.x') }}
+  # skip: true  # [not win]
 
 requirements:
   build:
@@ -109,57 +105,166 @@ requirements:
     - {{ compiler('cxx') }}
     - {{ compiler('cuda') }}
     - {{ stdlib('c') }}
-    - cmake >=3.20,<4
+    - cmake >=3.30,<4
     - libgomp  # [linux]
-    - llvm-openmp  # [osx]
-    - m2-coreutils  # [win]
-    - m2-make  # [win]
-    - m2-perl  # [win]
-    - make  # [unix]
+    # Commented out tools needed when doing source-code generation
+    # - m2-coreutils  # [win]
+    # - m2-make  # [win]
+    # - m2-perl  # [win]
+    # - make  # [unix]
     - ninja
-    - python
   host:
     - cuda-version {{ cuda_compiler_version }}
     - cuda-cudart-dev
+    - cuda-profiler-api
     - libcublas-dev
     - libcusparse-dev
     - liblapack
     - libblas
     - nomkl
 
-test:
-  commands:
-    - test ! -f $PREFIX/include/magma.h                        # [unix]
-    - if exist %LIBRARY_PREFIX%\include\magma.h exit 1         # [win]
-    - test -f $PREFIX/lib/libmagma${SHLIB_EXT}                 # [unix]
-    - if not exist %LIBRARY_PREFIX%\lib\magma.lib exit 1       # [win]
-    - if not exist %LIBRARY_PREFIX%\bin\magma.dll exit 1       # [win]
-    - test ! -f $PREFIX/lib/libmagma_sparse${SHLIB_EXT}        # [unix]
-    - if exist %LIBRARY_PREFIX%\lib\magma_sparse.lib exit 1    # [win]
-    - if exist %LIBRARY_PREFIX%\bin\magma_sparse.dll exit 1    # [win]
-    - test ! -f $PREFIX/lib/pkgconfig/magma.pc                 # [unix]
-    - if exist %LIBRARY_PREFIX%\lib\pkgconfig\magma.pc exit 1  # [win]
-{% for each_header in magma_headers %}
-    - test ! -f $PREFIX/include/magma_{{ each_header }}.h                 # [unix]
-    - if exist %LIBRARY_PREFIX%\include\magma_{{ each_header }}.h exit 1  # [win]
-{% endfor %}
-{% for each_header in magmasparse_headers %}
-    - test ! -f $PREFIX/include/magmasparse_{{ each_header }}.h                 # [unix]
-    - if exist %LIBRARY_PREFIX%\include\magmasparse_{{ each_header }}.h exit 1  # [win]
-{% endfor %}
-{% for each_header in magmablas_headers %}
-    - test ! -f $PREFIX/include/magmablas_{{ each_header }}.h                 # [unix]
-    - if exist %LIBRARY_PREFIX%\include\magmablas_{{ each_header }}.h exit 1  # [win]
-{% endfor %}
+outputs:
+  - name: libmagma
+    files:
+      include:
+        - lib  # [unix]
+        - Library\bin  # [win]
+      exclude:
+        - lib/pkgconfig  # [unix]
+        - lib/libmagma_sparse.so  # [linux]
+        - Library\bin\magma_sparse.dll  # [win]
+    requirements:
+      build:
+        - {{ compiler('c') }}
+        - {{ compiler('cxx') }}
+        - {{ compiler('cuda') }}
+        - {{ stdlib('c') }}
+        - libgomp  # [linux]
+      host:
+        - cuda-version {{ cuda_compiler_version }}
+        - cuda-cudart-dev
+        - libcublas-dev
+        - libcusparse-dev
+        - liblapack
+        - libblas
+        - nomkl
+    test:
+      commands:
+        - test -f $PREFIX/lib/libmagma${SHLIB_EXT}                 # [unix]
+        - if not exist %LIBRARY_PREFIX%\bin\magma.dll exit 1       # [win]
+    about:
+      home: https://icl.utk.edu/magma/
+      dev_url:  https://github.com/icl-utk-edu/magma/
+      summary: The Matrix Algebra on GPU and Multicore Architectures (MAGMA) runtime libraries.
+      description: >-
+        This is a runtime package only. Developers should install libmagma-devel to build with
+        MAGMA.
+      license: BSD-3-Clause
+      license_file: COPYRIGHT
+
+  - name: libmagma_sparse
+    files:
+      include:
+        - lib/libmagma_sparse.so  # [linux]
+        - Library\bin\magma_sparse.dll  # [win]
+    requirements:
+      build:
+        - {{ compiler('c') }}
+        - {{ compiler('cxx') }}
+        - {{ compiler('cuda') }}
+        - {{ stdlib('c') }}
+        - libgomp  # [linux]
+      host:
+        - cuda-version {{ cuda_compiler_version }}
+        - cuda-cudart-dev
+        - libcusparse-dev
+        - liblapack
+        - libblas
+        - nomkl
+        - {{ pin_subpackage('libmagma', exact=True) }}
+      run:
+        - {{ pin_subpackage('libmagma', exact=True) }}
+    test:
+      commands:
+        - test -f $PREFIX/lib/libmagma_sparse${SHLIB_EXT}        # [unix]
+        - if not exist %LIBRARY_PREFIX%\bin\magma_sparse.dll exit 1    # [win]
+    about:
+      home: https://icl.utk.edu/magma/
+      dev_url:  https://github.com/icl-utk-edu/magma/
+      summary: The Matrix Algebra on GPU and Multicore Architectures (MAGMA) runtime libraries.
+      description: >-
+        This is a runtime package only. Developers should install libmagma-devel to build with
+        MAGMA.
+      license: BSD-3-Clause
+      license_file: COPYRIGHT
+
+  - name: libmagma-devel
+    files:
+      include:
+        - include  # [unix]
+        - lib/pkgconfig  # [unix]
+        - Library\include  # [win]
+        - Library\lib  # [win]
+    build:
+      run_exports:
+        - {{ pin_subpackage('libmagma', max_pin='x.x.x') }}
+        - {{ pin_subpackage('libmagma_sparse', max_pin='x.x.x') }}
+    requirements:
+      build:
+        - {{ compiler('c') }}
+        - {{ compiler('cxx') }}
+        - {{ compiler('cuda') }}
+        - {{ stdlib('c') }}
+        - libgomp  # [linux]
+      host:
+        - cuda-version {{ cuda_compiler_version }}
+        - nomkl
+        - {{ pin_subpackage('libmagma', exact=True) }}
+        - {{ pin_subpackage('libmagma_sparse', exact=True) }}
+      run:
+        - {{ pin_subpackage('libmagma', exact=True) }}  # [not win]
+        - {{ pin_subpackage('libmagma_sparse', exact=True) }}  # [not win]
+    test:
+        commands:
+          - test -f $PREFIX/include/magma.h                            # [unix]
+          - if not exist %LIBRARY_PREFIX%\include\magma.h exit 1         # [win]
+          - test -f $PREFIX/lib/libmagma${SHLIB_EXT}                     # [unix]
+          - if not exist %LIBRARY_PREFIX%\lib\magma.lib exit 1           # [win]
+          - test -f $PREFIX/lib/libmagma_sparse${SHLIB_EXT}            # [unix]
+          - if not exist %LIBRARY_PREFIX%\lib\magma_sparse.lib exit 1    # [win]
+          - test -f $PREFIX/lib/pkgconfig/magma.pc                     # [unix]
+          - if not exist %LIBRARY_PREFIX%\lib\pkgconfig\magma.pc exit 1  # [win]
+      {% for each_header in magma_headers %}
+          - test -f $PREFIX/include/magma_{{ each_header }}.h                     # [unix]
+          - if not exist %LIBRARY_PREFIX%\include\magma_{{ each_header }}.h exit 1  # [win]
+      {% endfor %}
+      {% for each_header in magmasparse_headers %}
+          - test -f $PREFIX/include/magmasparse_{{ each_header }}.h                     # [unix]
+          - if not exist %LIBRARY_PREFIX%\include\magmasparse_{{ each_header }}.h exit 1  # [win]
+      {% endfor %}
+      {% for each_header in magmablas_headers %}
+          - test -f $PREFIX/include/magmablas_{{ each_header }}.h                     # [unix]
+          - if not exist %LIBRARY_PREFIX%\include\magmablas_{{ each_header }}.h exit 1  # [win]
+      {% endfor %}
 
 about:
   home: https://icl.utk.edu/magma/
   dev_url:  https://github.com/icl-utk-edu/magma/
-  summary: Matrix Algebra on GPU and Multicore Architectures
+  summary: Matrix Algebra on GPU and Multicore Architectures (MAGMA)
+  description: >-
+    Matrix Algebra on GPU and Multi-core Architectures (MAGMA) is a collection of
+    next-generation linear algebra libraries for heterogeneous computing. MAGMA supports
+    interfaces for current linear algebra packages and standards (e.g., LAPACK and BLAS) to
+    enable computational scientists to easily port any linear algebra–reliant software
+    component to heterogeneous computing systems. MAGMA enables applications to fully
+    exploit the power of current hybrid systems of many-core CPUs and
+    multi-GPUs/coprocessors to deliver the fastest possible time to accurate solutions
+    within given energy constraints.
   license: BSD-3-Clause
   license_file: COPYRIGHT
 
 extra:
+  feedstock-name: libmagma
   recipe-maintainers:
     - carterbox
     - conda-forge/pytorch-cpu
