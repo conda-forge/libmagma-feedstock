@@ -11,21 +11,7 @@ set -exv
 # 11.8 supports archs 3.5 - 9.0
 # 12.x supports archs 5.0 - 9.0
 
-# Use the same arches as https://github.com/pytorch/pytorch/blob/07fa6e2c8b003319f85a469307f1b1dd73f6026c/.ci/magma/Makefile#L7
-# Only difference is 37 is replaced with 35.
-
-export CUDAARCHS="50-real;60-real;70-real;80-real"
-
-if [[ "$cuda_compiler_version" == "11.8" ]]; then
-  export CUDAARCHS="${CUDAARCHS};35-real;86-real;90"
-
-elif [[ "$cuda_compiler_version" == "12."* ]]; then
-  export CUDAARCHS="${CUDAARCHS};86-real;90-real;100-real;120"
-
-else
-  echo "Unsupported CUDA version. Please update build.sh"
-  exit 1
-fi
+# CUDAARCHS set by nvcc compiler package
 
 # Conda-forge nvcc compiler flags environment variable doesn't match CMake environment variable
 # Redirect it so that the flags are added to nvcc calls

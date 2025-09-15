@@ -4,18 +4,7 @@
 :: make generate --jobs %CPU_COUNT%
 :: if errorlevel 1 exit /b 1
 
-set "CUDAARCHS=50-real;60-real;70-real;80-real"
-
-if "%cuda_compiler_version%"=="11.8" (
-  set "CUDAARCHS=%CUDAARCHS%;35-real;86-real;90"
-
-) else if "%cuda_compiler_version:~0,3%"=="12." (
-  set "CUDAARCHS=%CUDAARCHS%;86-real;90-real;100-real;120"
-
-) else (
-  echo Unsupported CUDA version. Please update build.bat
-  exit /b 1
-)
+:: CUDAARCHS set by nvcc compiler package
 
 md build
 cd build
