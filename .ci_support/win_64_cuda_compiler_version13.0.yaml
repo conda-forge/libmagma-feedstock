@@ -1,0 +1,26 @@
+c_compiler:
+- vs2022
+c_stdlib:
+- vs
+channel_sources:
+- conda-forge
+channel_targets:
+- conda-forge main
+cuda_compiler:
+- cuda-nvcc
+cuda_compiler_version:
+- '13.0'
+cxx_compiler:
+- vs2022
+github_actions_labels:
+- cirun-azure-windows-2xlarge
+libblas:
+- 3.9.* *netlib
+liblapack:
+- 3.9.* *netlib
+libmagma:
+- '2.9'
+libmagma_sparse:
+- '2.9'
+target_platform:
+- win-64
