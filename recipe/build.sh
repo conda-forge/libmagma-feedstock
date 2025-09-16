@@ -3,14 +3,6 @@ set -exv
 # This step is required when building from raw source archive
 # make generate --jobs ${CPU_COUNT}
 
-# Only about 7 virtual archs can be built 6 hours for CUDA 11
-# Only about 8 archs fit into the default 2GB address space; could use
-# -mcmodel=medium to increase address space
-
-# 11.2 supports archs 3.5 - 8.6
-# 11.8 supports archs 3.5 - 9.0
-# 12.x supports archs 5.0 - 9.0
-
 # CUDAARCHS set by nvcc compiler package
 
 # Conda-forge nvcc compiler flags environment variable doesn't match CMake environment variable
