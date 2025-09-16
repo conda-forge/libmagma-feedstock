@@ -1,0 +1,36 @@
+From 235aefb7b064954fce09d035c69907ba8a87cbcd Mon Sep 17 00:00:00 2001
+From: Ahmad Abdelfattah <ahmad@icl.utk.edu>
+Date: Fri, 22 Aug 2025 11:56:30 -0400
+Subject: [PATCH] fix compilation issue with cuda 13
+
+---
+ interface_cuda/interface.cpp | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/interface_cuda/interface.cpp b/interface_cuda/interface.cpp
+index c3ae4e0eb..9c8e6c67f 100644
+--- a/interface_cuda/interface.cpp
++++ b/interface_cuda/interface.cpp
+@@ -391,10 +391,18 @@ magma_print_environment()
+         check_error( err );
+ 
+         #ifdef MAGMA_HAVE_CUDA
++
++        int clock_khz;
++        #if CUDA_VERSION >= 13000
++        cudaDeviceGetAttribute (&clock_khz, cudaDevAttrClockRate, dev);
++        #else
++        clock_khz = prop.clockRate;
++        #endif
++
+         printf( "%% device %d: %s, %.1f MHz clock, %.1f MiB memory, capability %d.%d\n",
+                 dev,
+                 prop.name,
+-                prop.clockRate / 1000.,
++                clock_khz / 1000.,
+                 prop.totalGlobalMem / (1024.*1024.),
+                 prop.major,
+                 prop.minor );
+-- 
+2.47.1.windows.2
+
