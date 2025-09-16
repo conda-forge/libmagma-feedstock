@@ -4,18 +4,7 @@
 :: make generate --jobs %CPU_COUNT%
 :: if errorlevel 1 exit /b 1
 
-set "CUDAARCHS=50-real;60-real;70-real;80-real"
-
-if "%cuda_compiler_version%"=="11.8" (
-  set "CUDAARCHS=%CUDAARCHS%;35-real;86-real;90"
-
-) else if "%cuda_compiler_version:~0,3%"=="12." (
-  set "CUDAARCHS=%CUDAARCHS%;86-real;90-real;100-real;120"
-
-) else (
-  echo Unsupported CUDA version. Please update build.bat
-  exit /b 1
-)
+:: CUDAARCHS set by nvcc compiler package
 
 md build
 cd build
@@ -23,6 +12,7 @@ if errorlevel 1 exit /b 1
 
 :: Must add --use-local-env to NVCC_FLAGS otherwise NVCC autoconfigs the host
 :: compiler to cl.exe instead of the full path.
+:: Must set CMAKE_CXX_STANDARD=17 because CCCL from CUDA 13 has dropped C++14
 cmake %SRC_DIR% ^
   -G "Ninja" ^
   -DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS:BOOL=ON ^
@@ -33,6 +23,7 @@ cmake %SRC_DIR% ^
   -DUSE_FORTRAN:BOOL=OFF ^
   -DCMAKE_CUDA_FLAGS="--use-local-env -Xfatbin -compress-all" ^
   -DCMAKE_CUDA_SEPARABLE_COMPILATION:BOOL=OFF ^
+  -DCMAKE_CXX_STANDARD=17 ^
   %CMAKE_ARGS%
 if errorlevel 1 exit /b 1
 
