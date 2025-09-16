@@ -12,6 +12,7 @@ if errorlevel 1 exit /b 1
 
 :: Must add --use-local-env to NVCC_FLAGS otherwise NVCC autoconfigs the host
 :: compiler to cl.exe instead of the full path.
+:: Must set CMAKE_CXX_STANDARD=17 because CCCL from CUDA 13 has dropped C++14
 cmake %SRC_DIR% ^
   -G "Ninja" ^
   -DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS:BOOL=ON ^
@@ -22,6 +23,7 @@ cmake %SRC_DIR% ^
   -DUSE_FORTRAN:BOOL=OFF ^
   -DCMAKE_CUDA_FLAGS="--use-local-env -Xfatbin -compress-all" ^
   -DCMAKE_CUDA_SEPARABLE_COMPILATION:BOOL=OFF ^
+  -DCMAKE_CXX_STANDARD=17 ^
   %CMAKE_ARGS%
 if errorlevel 1 exit /b 1
 

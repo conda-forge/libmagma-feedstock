@@ -23,6 +23,7 @@ export CUDAFLAGS="${CUDAFLAGS} -Xfatbin -compress-all"
 mkdir build
 cd build
 
+# Must set CMAKE_CXX_STANDARD=17 because CCCL from CUDA 13 has dropped C++14
 cmake $SRC_DIR \
   -G "Ninja" \
   -DBUILD_SHARED_LIBS:BOOL=ON \
@@ -31,6 +32,7 @@ cmake $SRC_DIR \
   -DMAGMA_ENABLE_CUDA:BOOL=ON \
   -DUSE_FORTRAN:BOOL=OFF \
   -DCMAKE_CUDA_SEPARABLE_COMPILATION:BOOL=OFF \
+  -DCMAKE_CXX_STANDARD=17 \
   ${CMAKE_ARGS}
 
 # Explicitly name build targets to avoid building tests
