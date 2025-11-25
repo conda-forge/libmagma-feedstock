@@ -135,6 +135,13 @@ outputs:
         - lib/pkgconfig  # [unix]
         - lib/libmagma_sparse.so  # [linux]
         - Library\bin\magma_sparse.dll  # [win]
+    build:
+      ignore_run_exports:
+        - cuda-version
+      ignore_run_exports_from:
+        - cuda-cudart-dev
+        - libcublas-dev
+        - libcusparse-dev
     requirements:
       build:
         - {{ compiler('c') }}
@@ -150,6 +157,11 @@ outputs:
         - liblapack
         - libblas
         - nomkl
+      run:
+        - {{ pin_compatible('cuda-version', max_pin='x', min_pin='x') }}
+        - cuda-cudart
+        - libcublas
+        - libcusparse
     test:
       commands:
         - test -f $PREFIX/lib/libmagma${SHLIB_EXT}                 # [unix]
@@ -169,6 +181,12 @@ outputs:
       include:
         - lib/libmagma_sparse.so  # [linux]
         - Library\bin\magma_sparse.dll  # [win]
+    build:
+      ignore_run_exports:
+        - cuda-version
+      ignore_run_exports_from:
+        - cuda-cudart-dev
+        - libcusparse-dev
     requirements:
       build:
         - {{ compiler('c') }}
@@ -185,7 +203,10 @@ outputs:
         - nomkl
         - {{ pin_subpackage('libmagma', exact=True) }}
       run:
+        - {{ pin_compatible('cuda-version', max_pin='x', min_pin='x') }}
         - {{ pin_subpackage('libmagma', exact=True) }}
+        - cuda-cudart
+        - libcusparse
     test:
       commands:
         - test -f $PREFIX/lib/libmagma_sparse${SHLIB_EXT}        # [unix]
@@ -211,6 +232,8 @@ outputs:
       run_exports:
         - {{ pin_subpackage('libmagma', max_pin='x.x.x') }}
         - {{ pin_subpackage('libmagma_sparse', max_pin='x.x.x') }}
+      ignore_run_exports:
+        - cuda-version
     requirements:
       build:
         - {{ compiler('c') }}
@@ -224,6 +247,7 @@ outputs:
         - {{ pin_subpackage('libmagma', exact=True) }}
         - {{ pin_subpackage('libmagma_sparse', exact=True) }}
       run:
+        - {{ pin_compatible('cuda-version', max_pin='x', min_pin='x') }}
         - {{ pin_subpackage('libmagma', exact=True) }}  # [not win]
         - {{ pin_subpackage('libmagma_sparse', exact=True) }}  # [not win]
     test:
