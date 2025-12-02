@@ -159,7 +159,7 @@ outputs:
         - nomkl
       run:
         - {{ pin_compatible('cuda-version', max_pin='x', min_pin='x') }}
-        - cuda-cudart
+        - cuda-cudart  # [(not win) or (cuda_compiler_version or "").startswith("12")]
         - libcublas
         - libcusparse
     test:
@@ -205,7 +205,7 @@ outputs:
       run:
         - {{ pin_compatible('cuda-version', max_pin='x', min_pin='x') }}
         - {{ pin_subpackage('libmagma', exact=True) }}
-        - cuda-cudart
+        - cuda-cudart  # [(not win) or (cuda_compiler_version or "").startswith("12")]
         - libcusparse
     test:
       commands:
