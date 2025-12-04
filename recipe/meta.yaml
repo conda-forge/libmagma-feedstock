@@ -138,6 +138,7 @@ outputs:
     build:
       ignore_run_exports:
         - cuda-version
+      # Ignore run exports to implement CUDA minor version compatibility
       ignore_run_exports_from:
         - cuda-cudart-dev
         - libcublas-dev
@@ -159,6 +160,8 @@ outputs:
         - nomkl
       run:
         - {{ pin_compatible('cuda-version', max_pin='x', min_pin='x') }}
+        # Starting with CUDA 13.0 for Windows-only, cudart links are redirected to the
+        # CUDA driver at compile time. Therefore, cuda-cudart is not needed.
         - cuda-cudart  # [(not win) or (cuda_compiler_version or "").startswith("12")]
         - libcublas
         - libcusparse
