@@ -95,7 +95,7 @@ source:
       - patches/0001-fix-compilation-issue-with-cuda-13.patch
 
 build:
-  number: 4
+  number: 5
   skip: true  # [cuda_compiler_version == "None"]
   # debugging skips below
   # skip: true  # [not (linux64 and cuda_compiler_version == "12.9")]
@@ -135,6 +135,14 @@ outputs:
         - lib/pkgconfig  # [unix]
         - lib/libmagma_sparse.so  # [linux]
         - Library\bin\magma_sparse.dll  # [win]
+    build:
+      ignore_run_exports:
+        - cuda-version
+      # Ignore run exports to implement CUDA minor version compatibility
+      ignore_run_exports_from:
+        - cuda-cudart-dev
+        - libcublas-dev
+        - libcusparse-dev
     requirements:
       build:
         - {{ compiler('c') }}
@@ -150,6 +158,13 @@ outputs:
         - liblapack
         - libblas
         - nomkl
+      run:
+        - {{ pin_compatible('cuda-version', max_pin='x', min_pin='x') }}
+        # Starting with CUDA 13.0 for Windows-only, cudart links are redirected to the
+        # CUDA driver at compile time. Therefore, cuda-cudart is not needed.
+        - cuda-cudart  # [(not win) or (cuda_compiler_version or "").startswith("12")]
+        - libcublas
+        - libcusparse
     test:
       commands:
         - test -f $PREFIX/lib/libmagma${SHLIB_EXT}                 # [unix]
@@ -169,6 +184,12 @@ outputs:
       include:
         - lib/libmagma_sparse.so  # [linux]
         - Library\bin\magma_sparse.dll  # [win]
+    build:
+      ignore_run_exports:
+        - cuda-version
+      ignore_run_exports_from:
+        - cuda-cudart-dev
+        - libcusparse-dev
     requirements:
       build:
         - {{ compiler('c') }}
@@ -185,7 +206,10 @@ outputs:
         - nomkl
         - {{ pin_subpackage('libmagma', exact=True) }}
       run:
+        - {{ pin_compatible('cuda-version', max_pin='x', min_pin='x') }}
         - {{ pin_subpackage('libmagma', exact=True) }}
+        - cuda-cudart  # [(not win) or (cuda_compiler_version or "").startswith("12")]
+        - libcusparse
     test:
       commands:
         - test -f $PREFIX/lib/libmagma_sparse${SHLIB_EXT}        # [unix]
@@ -211,6 +235,8 @@ outputs:
       run_exports:
         - {{ pin_subpackage('libmagma', max_pin='x.x.x') }}
         - {{ pin_subpackage('libmagma_sparse', max_pin='x.x.x') }}
+      ignore_run_exports:
+        - cuda-version
     requirements:
       build:
         - {{ compiler('c') }}
@@ -224,6 +250,7 @@ outputs:
         - {{ pin_subpackage('libmagma', exact=True) }}
         - {{ pin_subpackage('libmagma_sparse', exact=True) }}
       run:
+        - {{ pin_compatible('cuda-version', max_pin='x', min_pin='x') }}
         - {{ pin_subpackage('libmagma', exact=True) }}  # [not win]
         - {{ pin_subpackage('libmagma_sparse', exact=True) }}  # [not win]
     test:
