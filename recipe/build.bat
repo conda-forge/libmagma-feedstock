@@ -14,6 +14,12 @@ if errorlevel 1 exit /b 1
 :: compiler to cl.exe instead of the full path.
 set CUDAFLAGS=--use-local-env
 
+:: Suppress MSVC warning C4996 (deprecated declarations) for host code, both
+:: directly and when nvcc forwards flags to the host compiler
+set CFLAGS=%CFLAGS% /wd4996
+set CXXFLAGS=%CXXFLAGS% /wd4996
+set CUDAFLAGS=%CUDAFLAGS% -Xcompiler /wd4996
+
 :: Compress SASS and PTX in the binary to reduce disk usage
 set CUDAFLAGS=%CUDAFLAGS% -Xfatbin -compress-all
 

@@ -1,0 +1,264 @@
+schema_version: 1
+
+context:
+  version: "2.10.0"
+  magma_headers:
+    - auxiliary
+    - batched
+    - bulge
+    - c
+    - cbatched
+    - cbulge
+    - cbulgeinc
+    - cgehrd_m
+    - clapack
+    - config
+    - copy
+    - cvbatched
+    - d
+    - dbatched
+    - dbulge
+    - dbulgeinc
+    - dgehrd_m
+    - dlapack
+    - ds
+    - dvbatched
+    - hbatched
+    - htc
+    - lapack
+    - mangling_cmake
+    - mangling
+    - operators
+    - s
+    - sbatched
+    - sbulge
+    - sbulgeinc
+    - sgehrd_m
+    - slapack
+    - svbatched
+    - types
+    - v2
+    - vbatched
+    - z
+    - zbatched
+    - zbulge
+    - zbulgeinc
+    - zc
+    - zgehrd_m
+    - zlapack
+    - zvbatched
+  magmasparse_headers:
+    - c
+    - d
+    - mmio
+    - s
+    - types
+    - z
+  magmablas_headers:
+    - c
+    - d
+    - ds
+    - h
+    - s
+    - z
+    - zc
+
+recipe:
+  name: libmagma-split
+  version: ${{ version }}
+
+source:
+  url: https://icl.utk.edu/projectsfiles/magma/downloads/magma-${{ version }}.tar.gz
+  sha256: ea0c57fcb64ac2fd7ffe8f02d8fe18f07055c5b7fba0164f565d1e3a85148fb5
+
+build:
+  number: 2
+  skip:
+    - cuda_compiler_version == "None"
+    # debugging skips below
+    - not (win and arm64)
+
+outputs:
+  - staging:
+      name: libmagma-split-build
+    build:
+      script:
+        env:
+          cuda_compiler_version: ${{ cuda_compiler_version }}
+    requirements:
+      build:
+        - ${{ compiler('c') }}
+        - ${{ compiler('cxx') }}
+        - ${{ compiler('cuda') }}
+        - ${{ stdlib('c') }}
+        - cmake >=4.4,<5
+        - if: linux
+          then: libgomp
+        - if: win
+          then: vcomp14
+        - if: linux and aarch64 and cuda_compiler_version != "None"
+          then: arm-variant * ${{ arm_variant_type }}
+        # Commented out tools needed when doing source-code generation
+        # - m2-coreutils  # [win]
+        # - m2-make  # [win]
+        # - m2-perl  # [win]
+        # - make  # [unix]
+        - ninja
+      host:
+        - cuda-version ${{ cuda_compiler_version }}.*
+        - cuda-cudart-dev
+        - cuda-profiler-api
+        - libcublas-dev
+        - libcusparse-dev
+        - liblapack
+        - libblas
+        - nomkl
+
+  - package:
+      name: libmagma
+    inherit: libmagma-split-build
+    build:
+      files:
+        include:
+          - if: unix
+            then: lib/**
+          - if: win
+            then: Library/bin/**
+        exclude:
+          - if: unix
+            then: lib/pkgconfig/**
+          - if: linux
+            then: lib/libmagma_sparse.so
+          - if: win
+            then: Library/bin/magma_sparse.dll
+    requirements:
+      # Ignore run exports to implement CUDA minor version compatibility
+      ignore_run_exports:
+        by_name:
+          - cuda-version
+        from_package:
+          - cuda-cudart-dev
+          - libcublas-dev
+          - libcusparse-dev
+      run:
+        - ${{ pin_compatible('cuda-version', upper_bound='x', lower_bound='x') }}
+        # Starting with CUDA 13.0 for Windows-only, cudart links are redirected to the
+        # CUDA driver at compile time. Therefore, cuda-cudart is not needed.
+        - if: (not win) or cuda_compiler_version is startingwith("12")
+          then: cuda-cudart
+        - libcublas
+        - libcusparse
+    tests:
+      - script:
+          - if: unix
+            then: test -f $PREFIX/lib/libmagma${SHLIB_EXT}
+          - if: win
+            then: if not exist %LIBRARY_PREFIX%\bin\magma.dll exit 1
+    about:
+      homepage: https://icl.utk.edu/magma/
+      repository: https://github.com/icl-utk-edu/magma/
+      summary: The Matrix Algebra on GPU and Multicore Architectures (MAGMA) runtime libraries.
+      description: >-
+        This is a runtime package only. Developers should install libmagma-devel to build with MAGMA.
+      license: BSD-3-Clause
+      license_file: COPYRIGHT
+
+  - package:
+      name: libmagma_sparse
+    inherit: libmagma-split-build
+    build:
+      files:
+        - if: linux
+          then: lib/libmagma_sparse.so
+        - if: win
+          then: Library/bin/magma_sparse.dll
+    requirements:
+      ignore_run_exports:
+        by_name:
+          - cuda-version
+        from_package:
+          - cuda-cudart-dev
+          - libcusparse-dev
+      run:
+        - ${{ pin_compatible('cuda-version', upper_bound='x', lower_bound='x') }}
+        - ${{ pin_subpackage('libmagma', exact=True) }}
+        - if: (not win) or cuda_compiler_version is startingwith("12")
+          then: cuda-cudart
+        - libcusparse
+    tests:
+      - script:
+          - if: unix
+            then: test -f $PREFIX/lib/libmagma_sparse${SHLIB_EXT}
+          - if: win
+            then: if not exist %LIBRARY_PREFIX%\bin\magma_sparse.dll exit 1
+    about:
+      homepage: https://icl.utk.edu/magma/
+      repository: https://github.com/icl-utk-edu/magma/
+      summary: The Matrix Algebra on GPU and Multicore Architectures (MAGMA) runtime libraries.
+      description: >-
+        This is a runtime package only. Developers should install libmagma-devel to build with MAGMA.
+      license: BSD-3-Clause
+      license_file: COPYRIGHT
+
+  - package:
+      name: libmagma-devel
+    inherit: libmagma-split-build
+    build:
+      files:
+        - if: unix
+          then:
+            - include/**
+            - lib/pkgconfig/**
+        - if: win
+          then:
+            - Library/include/**
+            - Library/lib/**
+    requirements:
+      run_exports:
+        - ${{ pin_subpackage('libmagma', upper_bound='x.x.x') }}
+        - ${{ pin_subpackage('libmagma_sparse', upper_bound='x.x.x') }}
+      ignore_run_exports:
+        by_name:
+          - cuda-version
+      run:
+        - ${{ pin_compatible('cuda-version', upper_bound='x', lower_bound='x') }}
+        - if: not win
+          then:
+            - ${{ pin_subpackage('libmagma', exact=True) }}
+            - ${{ pin_subpackage('libmagma_sparse', exact=True) }}
+    tests:
+      - script:
+          - if: unix
+            then:
+              - test -f $PREFIX/include/magma.h
+              - test -f $PREFIX/lib/libmagma${SHLIB_EXT}
+              - test -f $PREFIX/lib/libmagma_sparse${SHLIB_EXT}
+              - test -f $PREFIX/lib/pkgconfig/magma.pc
+              - for h in ${{ magma_headers | join(" ") }}; do test -f $PREFIX/include/magma_$h.h; done
+              - for h in ${{ magmasparse_headers | join(" ") }}; do test -f $PREFIX/include/magmasparse_$h.h; done
+              - for h in ${{ magmablas_headers | join(" ") }}; do test -f $PREFIX/include/magmablas_$h.h; done
+          - if: win
+            then:
+              - if not exist %LIBRARY_PREFIX%\include\magma.h exit 1
+              - if not exist %LIBRARY_PREFIX%\lib\magma.lib exit 1
+              - if not exist %LIBRARY_PREFIX%\lib\magma_sparse.lib exit 1
+              - if not exist %LIBRARY_PREFIX%\lib\pkgconfig\magma.pc exit 1
+              - for %%h in (${{ magma_headers | join(" ") }}) do if not exist %LIBRARY_PREFIX%\include\magma_%%h.h exit 1
+              - for %%h in (${{ magmasparse_headers | join(" ") }}) do if not exist %LIBRARY_PREFIX%\include\magmasparse_%%h.h exit 1
+              - for %%h in (${{ magmablas_headers | join(" ") }}) do if not exist %LIBRARY_PREFIX%\include\magmablas_%%h.h exit 1
+
+about:
+  homepage: https://icl.utk.edu/magma/
+  repository: https://github.com/icl-utk-edu/magma/
+  summary: Matrix Algebra on GPU and Multicore Architectures (MAGMA)
+  description: >-
+    Matrix Algebra on GPU and Multi-core Architectures (MAGMA) is a collection of next-generation linear algebra libraries for heterogeneous computing. MAGMA supports interfaces for current linear algebra packages and standards (e.g., LAPACK and BLAS) to enable computational scientists to easily port any linear algebra–reliant
+    software component to heterogeneous computing systems. MAGMA enables applications to fully exploit the power of current hybrid systems of many-core CPUs and multi-GPUs/coprocessors to deliver the fastest possible time to accurate solutions within given energy constraints.
+  license: BSD-3-Clause
+  license_file: COPYRIGHT
+
+extra:
+  feedstock-name: libmagma
+  recipe-maintainers:
+    - carterbox
+    - conda-forge/pytorch-cpu

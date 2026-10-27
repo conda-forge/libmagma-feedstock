@@ -9,7 +9,7 @@ channel_targets:
 cuda_compiler:
 - cuda-nvcc
 cuda_compiler_version:
-- '12.9'
+- '13.4'
 cxx_compiler:
 - vs2022
 github_actions_labels:
@@ -18,9 +18,5 @@ libblas:
 - 3.9.* *netlib
 liblapack:
 - 3.9.* *netlib
-libmagma:
-- 2.10.0
-libmagma_sparse:
-- 2.10.0
 target_platform:
-- win-64
+- win-arm64

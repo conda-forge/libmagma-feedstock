@@ -22,87 +22,11 @@ jobs:
       max-parallel: 50
       matrix:
         include:
-          - CONFIG: linux_64_c_stdlib_version2.17cuda_compiler_version12.9
-            CONFIG_SHORT: linux_64_c_stdlib_version2.17cuda_compil_hd7918865
-            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma9
+          - CONFIG: win_arm64_cuda_compiler_version13.4
+            CONFIG_SHORT: win_arm64_cuda_compiler_version13.4
             STORE_BUILD_ARTIFACTS: True
             UPLOAD_PACKAGES: True
-            build_workspace_dir: build_artifacts
-            docker_run_args: 
-            free_disk_space: skip
-            os: ubuntu
-            pagefile_size: 0
-            resize_partitions: False
-            runs_on: ['depot-ubuntu-24.04-16']
-            tools_install_dir: ~/miniforge3
-          - CONFIG: linux_64_c_stdlib_version2.28cuda_compiler_version13.0
-            CONFIG_SHORT: linux_64_c_stdlib_version2.28cuda_compil_h282d3825
-            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma9
-            STORE_BUILD_ARTIFACTS: True
-            UPLOAD_PACKAGES: True
-            build_workspace_dir: build_artifacts
-            docker_run_args: 
-            free_disk_space: skip
-            os: ubuntu
-            pagefile_size: 0
-            resize_partitions: False
-            runs_on: ['depot-ubuntu-24.04-16']
-            tools_install_dir: ~/miniforge3
-          - CONFIG: linux_aarch64_arm_variant_typesbsac_stdlib_version2.17cuda_compiler_version12.9
-            CONFIG_SHORT: linux_aarch64_arm_variant_typesbsac_stdl_h6a4a0357
-            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-aarch64:alma9
-            STORE_BUILD_ARTIFACTS: True
-            UPLOAD_PACKAGES: True
-            build_workspace_dir: build_artifacts
-            docker_run_args: 
-            free_disk_space: skip
-            os: ubuntu
-            pagefile_size: 0
-            resize_partitions: False
-            runs_on: ['depot-ubuntu-24.04-arm-16']
-            tools_install_dir: ~/miniforge3
-          - CONFIG: linux_aarch64_arm_variant_typesbsac_stdlib_version2.28cuda_compiler_version13.0
-            CONFIG_SHORT: linux_aarch64_arm_variant_typesbsac_stdl_h1d8a58f0
-            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-aarch64:alma9
-            STORE_BUILD_ARTIFACTS: True
-            UPLOAD_PACKAGES: True
-            build_workspace_dir: build_artifacts
-            docker_run_args: 
-            free_disk_space: skip
-            os: ubuntu
-            pagefile_size: 0
-            resize_partitions: False
-            runs_on: ['depot-ubuntu-24.04-arm-16']
-            tools_install_dir: ~/miniforge3
-          - CONFIG: linux_aarch64_arm_variant_typetegrac_stdlib_version2.34cuda_compiler_version12.9
-            CONFIG_SHORT: linux_aarch64_arm_variant_typetegrac_std_h645bfee9
-            DOCKER_IMAGE: quay.io/condaforge/linux-anvil-aarch64:alma9
-            STORE_BUILD_ARTIFACTS: True
-            UPLOAD_PACKAGES: True
-            build_workspace_dir: build_artifacts
-            docker_run_args: 
-            free_disk_space: skip
-            os: ubuntu
-            pagefile_size: 0
-            resize_partitions: False
-            runs_on: ['depot-ubuntu-24.04-arm-16']
-            tools_install_dir: ~/miniforge3
-          - CONFIG: win_64_cuda_compiler_version12.9
-            CONFIG_SHORT: win_64_cuda_compiler_version12.9
-            STORE_BUILD_ARTIFACTS: True
-            UPLOAD_PACKAGES: True
-            build_workspace_dir: C:\\bld\\
-            docker_run_args: 
-            free_disk_space: skip
-            os: windows
-            pagefile_size: 0
-            resize_partitions: False
-            runs_on: ['depot-windows-2025-16']
-            tools_install_dir: C:\Miniforge
-          - CONFIG: win_64_cuda_compiler_version13.0
-            CONFIG_SHORT: win_64_cuda_compiler_version13.0
-            STORE_BUILD_ARTIFACTS: True
-            UPLOAD_PACKAGES: True
+            build_platform: win-64
             build_workspace_dir: C:\\bld\\
             docker_run_args: 
             free_disk_space: skip
@@ -114,13 +38,15 @@ jobs:
     steps:
 
     - name: Checkout code
-      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
     - name: Configure binfmt_misc
       if: matrix.os == 'ubuntu'
       shell: bash
       run: |
         if [[ "$(uname -m)" == "x86_64" ]]; then
           docker run --rm --privileged multiarch/qemu-user-static:register --reset --credential yes
+        elif [[ "$(uname -m)" == "aarch64" ]]; then
+          docker run --rm --privileged --entrypoint /opt/docker/bin/register-binfmt ${{ matrix.DOCKER_IMAGE }} aarch64
         fi
 
     - name: Build on Linux
@@ -143,7 +69,7 @@ jobs:
       run: |
         export CONDA_BLD_PATH="${CONDA_BLD_PATH/#~/${HOME}}"
         export FEEDSTOCK_NAME="$(basename $GITHUB_REPOSITORY)"
-        export GIT_BRANCH="$(basename $GITHUB_REF)"
+        export GIT_BRANCH="${GITHUB_REF_NAME}"
         export MINIFORGE_HOME="${MINIFORGE_HOME/#~/${HOME}}"
         export flow_run_id="github_$GITHUB_RUN_ID"
         export remote_url="https://github.com/$GITHUB_REPOSITORY"
@@ -173,7 +99,7 @@ jobs:
       run: |
         export CONDA_BLD_PATH="${CONDA_BLD_PATH/#~/${HOME}}"
         export FEEDSTOCK_NAME="$(basename $GITHUB_REPOSITORY)"
-        export GIT_BRANCH="$(basename $GITHUB_REF)"
+        export GIT_BRANCH="${GITHUB_REF_NAME}"
         export MINIFORGE_HOME="${MINIFORGE_HOME/#~/${HOME}}"
         export flow_run_id="github_$GITHUB_RUN_ID"
         export remote_url="https://github.com/$GITHUB_REPOSITORY"
@@ -195,6 +121,7 @@ jobs:
         set "sha=%GITHUB_SHA%"
         call ".scripts\run_win_build.bat"
       env:
+        BUILD_PLATFORM: ${{ matrix.build_platform }}
         CI: github_actions
         CONDA_BLD_PATH: ${{ matrix.build_workspace_dir }}
         CONFIG: ${{ matrix.CONFIG }}
@@ -241,6 +168,7 @@ jobs:
         CONFIG: ${{ matrix.CONFIG }}
         CONFIG_SHORT: ${{ matrix.CONFIG_SHORT }}
         JOB_STATUS: ${{ steps.determine-status.outputs.status }}
+        MINIFORGE_HOME: ${{ matrix.tools_install_dir }}
         OS: ${{ matrix.os }}
       run: |
         export ARTIFACT_STAGING_DIR="$GITHUB_WORKSPACE"
@@ -253,8 +181,9 @@ jobs:
         # Use different prefix for successful and failed build artifacts
         # so random failures don't prevent rebuilds from creating artifacts.
         if [ $JOB_STATUS == "failure" ]; then
-          export BLD_ARTIFACT_PREFIX="conda_artifacts"
+          export BLD_ARTIFACT_PREFIX="conda_pkgs_failed"
           export ENV_ARTIFACT_PREFIX="conda_envs"
+          export WRK_ARTIFACT_PREFIX="conda_work"
         else
           export BLD_ARTIFACT_PREFIX="conda_pkgs"
         fi
@@ -266,19 +195,31 @@ jobs:
 
     - name: Store conda build artifacts
       uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-      if: ${{ always() && steps.prepare-artifacts.outcome == 'success' }}
+      if: ${{ always() && steps.prepare-artifacts.outcome == 'success' && steps.prepare-artifacts.outputs.BLD_ARTIFACT_PATH != '' }}
       with:
         name: ${{ steps.prepare-artifacts.outputs.BLD_ARTIFACT_NAME }}
         path: ${{ steps.prepare-artifacts.outputs.BLD_ARTIFACT_PATH }}
         retention-days: 14
+        archive: false
+      continue-on-error: true
+
+    - name: Store conda work directory artifacts
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      if: ${{ always() && steps.prepare-artifacts.outcome == 'success' && steps.prepare-artifacts.outputs.WRK_ARTIFACT_PATH != '' }}
+      with:
+        name: ${{ steps.prepare-artifacts.outputs.WRK_ARTIFACT_NAME }}
+        path: ${{ steps.prepare-artifacts.outputs.WRK_ARTIFACT_PATH }}
+        retention-days: 14
+        archive: false
       continue-on-error: true
 
     - name: Store conda build environment artifacts
       uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
       # only relevant if build failed, see above
-      if: ${{ always() && steps.determine-status.outputs.status == 'failure' && steps.prepare-artifacts.outcome == 'success' }}
+      if: ${{ always() && steps.prepare-artifacts.outcome == 'success' && steps.prepare-artifacts.outputs.ENV_ARTIFACT_PATH != '' }}
       with:
         name: ${{ steps.prepare-artifacts.outputs.ENV_ARTIFACT_NAME }}
         path: ${{ steps.prepare-artifacts.outputs.ENV_ARTIFACT_PATH }}
         retention-days: 14
+        archive: false
       continue-on-error: true
