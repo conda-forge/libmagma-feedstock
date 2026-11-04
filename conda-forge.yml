@@ -1,4 +1,5 @@
 build_platform:
+  linux_64: linux_aarch64
   linux_aarch64: linux_aarch64
 conda_build:
   error_overlinking: true
@@ -19,9 +20,8 @@ provider:
   linux_64: github_actions
   linux_aarch64: github_actions
   win_64: github_actions
-workflow_settings: 
-  free_disk_space: 
+workflow_settings:
+  free_disk_space:
     - provider: azure
       value: quick
   store_build_artifacts: true
-  
